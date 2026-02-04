@@ -28,23 +28,19 @@ export const PRESTAMO_FAQS: FaqItem[] = [
 
 export const SEGURO_FAQS: FaqItem[] = [
   {
-    question: '¿Qué cubre y a quién cubre?',
-    answer: 'El Seguro de Protección Vida capital constante cubre al titular del préstamo en caso de fallecimiento o incapacidad absoluta y permanente. El capital asegurado se destina a la cancelación o reducción del préstamo, de modo que los beneficiarios o el propio titular no tengan que hacer frente a las cuotas en esas situaciones.'
+    question: '¿Qué cubre este seguro?',
+    answer: 'Garantiza en caso de fallecimiento o de incapacidad permanente absoluta (IPA) del asegurado, por cualquier causa, el pago del capital asegurado a los beneficiarios designados en el certificado individual de seguro.'
   },
   {
-    question: '¿Existen restricciones en lo que respecta a la cobertura del seguro?',
-    answer: 'Sí. La cobertura está sujeta a las condiciones generales y particulares del seguro. No se cubren, entre otros, los siniestros derivados de causas preexistentes no declaradas, determinadas actividades de riesgo o el incumplimiento del deber de veracidad en el cuestionario de salud. Consulta la póliza para el detalle completo.'
+    question: '¿Qué es un seguro de vida de capital constante anual renovable?',
+    answer: 'Es un seguro de vida que se renueva anualmente de forma automática. En nuestro caso, la forma de pago será mensual. Asegura el 100% del capital del préstamo, y ese capital asegurado se mantendrá constante mientras el cliente lo desee. Anualmente, el cliente podrá solicitar la adaptación del capital asegurado a la deuda viva.'
   },
   {
-    question: '¿Para qué sirve un Seguro de vida y de Capital Constante?',
-    answer: 'Sirve para garantizar que, en caso de fallecimiento o incapacidad absoluta del titular, el capital pendiente del préstamo quede cubierto. El capital asegurado se mantiene constante durante la vigencia del préstamo, de modo que la protección se adapta a la evolución de la deuda.'
+    question: '¿Qué es la incapacidad permanente absoluta?',
+    answer: 'Es aquella situación física o psíquica irreversible, como consecuencia de un accidente o enfermedad, que le produzca al asegurado una inhabilitación total y permanente para llevar a cabo cualquier servicio retribuido por cuenta ajena o actividad profesional autónoma.'
   },
   {
-    question: '¿Tiene algún periodo de carencia?',
-    answer: 'El seguro no tiene periodo de carencia en el sentido de suspensión de cuotas del préstamo. La cobertura suele ser efectiva desde el momento de la contratación, salvo que en las condiciones se indique un periodo de espera para determinadas garantías (por ejemplo, suicidio en los primeros meses).'
-  },
-  {
-    question: '¿Puedo cancelar el seguro en cualquier momento?',
-    answer: 'Sí. Puedes solicitar la cancelación del seguro en cualquier momento durante la vigencia del préstamo. La baja será efectiva según las condiciones del contrato y no implica la cancelación del préstamo; las cuotas del préstamo seguirán siendo las mismas.'
+    question: '¿Por qué contratar un seguro de vida combinado a un préstamo consumo?',
+    answer: 'Contar con un seguro de vida permite proteger, total o parcialmente, el reembolso del préstamo al asegurado y sus familiares en caso de que se produzca la incapacidad permanente absoluta o fallecimiento, aminorando el impacto económico que ello puede suponer. Es esencial en los casos en los que la familia del asegurado depende económicamente de los ingresos de éste.'
   }
 ];

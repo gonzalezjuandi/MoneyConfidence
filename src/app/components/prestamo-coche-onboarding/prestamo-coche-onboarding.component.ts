@@ -11,6 +11,7 @@ declare var lucide: any;
 export class PrestamoCocheOnboardingComponent implements AfterViewInit {
   @Output() startSimulation = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
+  @Output() closeRequested = new EventEmitter<void>();
 
   showFaqModal = false;
   faqActiveTab: 'prestamo' | 'seguro' = 'prestamo';
@@ -32,11 +33,11 @@ export class PrestamoCocheOnboardingComponent implements AfterViewInit {
   }
 
   onClose(): void {
-    this.close.emit();
+    this.closeRequested.emit();
   }
 
   onBack(): void {
-    this.close.emit();
+    this.closeRequested.emit();
   }
 
   onOpenFaq(): void {

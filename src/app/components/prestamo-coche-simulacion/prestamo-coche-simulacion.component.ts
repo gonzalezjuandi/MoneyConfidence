@@ -12,6 +12,7 @@ declare var lucide: any;
 export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   @Output() back = new EventEmitter<void>();
   @Output() next = new EventEmitter<PrestamoCocheResumenData>();
+  @Output() closeRequested = new EventEmitter<void>();
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -56,6 +57,14 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   prestamoFaqs = PRESTAMO_FAQS;
   seguroFaqs = SEGURO_FAQS;
 
+  // Consentimiento compartir datos con aseguradora (cuando importe no es múltiplo de 500)
+  get amountIsMultipleOf500(): boolean {
+    return this.amount % 500 === 0;
+  }
+  userAcceptedDataShare = false;
+  dataShareAccepted = false;
+  loadingInsuranceQuote = false;
+
   ngOnInit(): void {
     this.updateMonthlyPayment();
   }
@@ -81,6 +90,32 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
 
   onBack(): void {
     this.back.emit();
+  }
+
+  onCloseRequest(): void {
+    this.closeRequested.emit();
+  }
+
+  onDataShareCheckChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.dataShareAccepted = checked;
+    if (checked) {
+      this.onAcceptDataShareChange(true);
+    }
+  }
+
+  private onAcceptDataShareChange(accepted: boolean): void {
+    if (!accepted) return;
+    this.userAcceptedDataShare = true;
+    this.loadingInsuranceQuote = true;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.loadingInsuranceQuote = false;
+      this.cdr.detectChanges();
+      if (typeof lucide !== 'undefined') {
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+    }, 1800);
   }
 
   onAmountInputChange(event: Event): void {
@@ -374,9 +409,9 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   onHasMedicalCondition(): void {
     // Usuario indica que padece condición médica
     this.closeMedicalModal();
-    // Deshabilitar el seguro
+    // Quitar el seguro pero permitir volver a seleccionar cuota/seguro
     this.hasInsurance = false;
-    this.isInsuranceDisabled = true;
+    this.isInsuranceDisabled = false;
     this.updateMonthlyPayment();
     // Mostrar toast de alerta
     this.showToastNotification(

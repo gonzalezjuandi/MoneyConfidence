@@ -10,7 +10,7 @@
         <button class="header-icon-btn" aria-label="Chat" (click)="onOpenFaq()">
           <i data-lucide="message-circle" class="w-5 h-5 stroke-[1.5]"></i>
         </button>
-        <button class="header-icon-btn" aria-label="Cerrar">
+        <button class="header-icon-btn" aria-label="Cerrar" (click)="onCloseRequest()">
           <i data-lucide="x" class="w-5 h-5 stroke-[1.5]"></i>
         </button>
       </div>
@@ -74,8 +74,33 @@
         <div class="payment-summary-rates">TIN {{ tin.toFixed(2) }} % anual TAE {{ tae.toFixed(2) }}%</div>
       </div>
 
-      <!-- Insurance Section -->
-      <div class="form-section">
+      <!-- Insurance Section: consentimiento si importe no es múltiplo de 500 -->
+      <div class="form-section" *ngIf="!amountIsMultipleOf500 && !userAcceptedDataShare">
+        <div class="insurance-consent-container">
+          <h3 class="insurance-consent-title">Necesitamos compartir tus datos con la compañía aseguradora.</h3>
+          <p class="insurance-consent-body">
+            Para calcular el precio del seguro con la cantidad personalizada que has introducido.
+          </p>
+          <label class="insurance-consent-checkbox-label">
+            <input type="checkbox"
+                   class="insurance-consent-checkbox"
+                   [checked]="dataShareAccepted"
+                   (change)="onDataShareCheckChange($event)">
+            <span class="insurance-consent-checkbox-text">Acepto compartir mis datos con la aseguradora</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Mini carga del módulo seguro (tras aceptar compartir datos) -->
+      <div class="form-section insurance-loading-section" *ngIf="!amountIsMultipleOf500 && userAcceptedDataShare && loadingInsuranceQuote">
+        <div class="insurance-quote-loading">
+          <div class="insurance-quote-spinner"></div>
+          <p class="insurance-quote-loading-text">Calculando precio del seguro...</p>
+        </div>
+      </div>
+
+      <!-- Insurance Section: check del seguro (múltiplo de 500 o tras aceptar datos) -->
+      <div class="form-section" *ngIf="amountIsMultipleOf500 || (userAcceptedDataShare && !loadingInsuranceQuote)">
         <h3 class="form-section-title">¿Quieres asegurar tu préstamo?</h3>
         <p class="insurance-description">
           El seguro cubre al titular del préstamo y las garantías son por fallecimiento e incapacidad absoluta.
@@ -90,7 +115,7 @@
                  [class.disabled]="isInsuranceDisabled">
           <label for="insurance-checkbox" class="insurance-label-wrapper" [class.disabled]="isInsuranceDisabled">
             <div class="insurance-checkbox-label">
-              Añadir Seguro Protección Vida capital constante
+              Seguro Protección Vida capital constante
             </div>
             <div class="insurance-content">
               <div class="insurance-cost">
@@ -112,7 +137,7 @@
       <button type="button"
               class="simulacion-cta"
               (click)="onNext()">
-        Ver resumen de tu solicitud
+        Continuar
       </button>
     </footer>
 
@@ -200,60 +225,49 @@
 
         <!-- Content -->
         <div class="drawer-content">
-          <h3 class="drawer-section-title">Información sobre la compañía de seguros</h3>
-          
+          <div class="drawer-info-section drawer-intro-section">
+            <h4 class="drawer-intro-title">Proceso de contratación del seguro</h4>
+            <p class="drawer-intro-text">
+              El proceso de contratación del seguro es 100% digital y consta de 4 fases: simulación del seguro, declaración de salud para importes superiores a X€, visualización de la información del préstamo junto con el seguro si ha decidido añadirlo a su cesta y finalmente lectura de toda la documentación necesaria para la formalización del contrato de seguro y firma.
+            </p>
+          </div>
+
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">Compañía de seguros</h4>
+            <h4 class="drawer-info-title">Garantías y coberturas</h4>
             <p class="drawer-info-text">
-              <strong>Zurich Seguros</strong><br>
-              Zurich Insurance plc, Sucursal en España<br>
-              CIF: W0051326F<br>
-              Dirección: Calle de Orense, 1, 28020 Madrid<br>
-              Registro DGSFP: C-0001
+              Fallecimiento e Invalidez Permanente Absoluta.
             </p>
           </div>
 
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">Coberturas</h4>
+            <h4 class="drawer-info-title">Capital asegurado</h4>
             <p class="drawer-info-text">
-              Cubre al titular del préstamo y las garantías son por fallecimiento e incapacidad absoluta.
+              El capital asegurado es igual al capital del préstamo y permanece constante, a excepción de que el Asegurado solicite su modificación a través de una oficina.
             </p>
           </div>
 
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">El precio del seguro varía cada año</h4>
+            <h4 class="drawer-info-title">Entidad aseguradora y mediadora</h4>
             <p class="drawer-info-text">
-              Te informaremos de la prima tres meses antes de la renovación.
+              <strong>Entidad aseguradora:</strong> BanSabadell Vida Sociedad Anónima de Seguros y Reaseguros.<br>
+              <strong>Entidad mediadora:</strong> BanSabadell Mediación, Operador de Banca-Seguros Vinculado del Grupo Banco Sabadell S.A.
             </p>
           </div>
 
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">Tiempo mínimo de contratación</h4>
+            <h4 class="drawer-info-title">Fecha de efecto</h4>
             <p class="drawer-info-text">
-              Durante los dos meses previos al vencimiento del depósito.
+              La fecha de efecto del seguro será la fecha de formalización del préstamo.
             </p>
           </div>
 
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">Características del seguro</h4>
-            <ul class="drawer-info-list">
-              <li>Capital asegurado igual al importe pendiente del préstamo</li>
-              <li>Cobertura de fallecimiento por cualquier causa</li>
-              <li>Cobertura de incapacidad absoluta y permanente</li>
-              <li>Prima mensual constante durante la vigencia del seguro</li>
-              <li>Renovación automática anual</li>
-            </ul>
+            <h4 class="drawer-info-title">Cancelación del seguro</h4>
+            <p class="drawer-info-text">
+              El seguro se extingue con la amortización total anticipada del préstamo, salvo que comunique el deseo de mantener la vigencia. Además, puede solicitar la cancelación anual con al menos un mes de antelación a la fecha de vencimiento del seguro.
+            </p>
           </div>
 
-          <div class="drawer-info-section">
-            <h4 class="drawer-info-title">Información legal</h4>
-            <p class="drawer-info-text drawer-legal-text">
-              Este seguro es opcional y no es requisito para la concesión del préstamo. 
-              La contratación del seguro es independiente de la concesión del préstamo. 
-              Puede consultar las condiciones generales y particulares del seguro antes de su contratación.
-            </p>
-            <a href="#" class="drawer-legal-link">Incluir información de contratación</a>
-          </div>
         </div>
 
         <!-- Footer -->

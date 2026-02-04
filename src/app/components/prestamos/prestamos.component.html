@@ -3,14 +3,16 @@
   <app-prestamo-coche-onboarding
     *ngIf="prestamoCocheView === 'onboarding'"
     (startSimulation)="onPrestamoCocheStartSimulation()"
-    (close)="onPrestamoCocheClose()">
+    (close)="onPrestamoCocheClose()"
+    (closeRequested)="onCloseRequestedPrestamoCoche()">
   </app-prestamo-coche-onboarding>
 
   <!-- Préstamo Coche: Simulación -->
   <app-prestamo-coche-simulacion
     *ngIf="prestamoCocheView === 'simulation'"
     (back)="onPrestamoCocheBack()"
-    (next)="onPrestamoCocheNext($event)">
+    (next)="onPrestamoCocheNext($event)"
+    (closeRequested)="onCloseRequestedPrestamoCoche()">
   </app-prestamo-coche-simulacion>
 
   <!-- Préstamo Coche: Resumen -->
@@ -18,7 +20,8 @@
     *ngIf="prestamoCocheView === 'resumen'"
     [loanData]="prestamoCocheData"
     (back)="onPrestamoCocheResumenBack()"
-    (next)="onPrestamoCocheResumenNext()">
+    (next)="onPrestamoCocheResumenNext()"
+    (closeRequested)="onCloseRequestedPrestamoCoche()">
   </app-prestamo-coche-resumen>
 
   <!-- Préstamo Coche: Gestor Documental -->
@@ -40,7 +43,8 @@
   <!-- Préstamo Coche: Loading Seguro -->
   <app-prestamo-coche-loading
     *ngIf="prestamoCocheView === 'seguro-loading'"
-    [message]="'Estamos preparando la documentación del seguro'">
+    [message]="'Estamos preparando la documentación del seguro'"
+    [subtitle]="'No te vayas todavía.'">
   </app-prestamo-coche-loading>
 
   <!-- Préstamo Coche: Gestor Documental Seguro -->
@@ -55,6 +59,7 @@
   <app-prestamo-coche-firma
     *ngIf="prestamoCocheView === 'seguro-firma'"
     [loanData]="prestamoCocheData"
+    [isSeguroFirma]="true"
     (complete)="onPrestamoCocheSeguroFirmaComplete()"
     (back)="onPrestamoCocheSeguroFirmaBack()">
   </app-prestamo-coche-firma>
@@ -71,6 +76,26 @@
     [loanData]="prestamoCocheData"
     (next)="onPrestamoCocheConfirmacionNext()">
   </app-prestamo-coche-confirmacion>
+
+  <!-- Modal: ¿Seguro que quieres irte? (al pulsar X en flujo préstamo con seguro) -->
+  <div class="exit-confirm-overlay" *ngIf="showExitConfirmModal" (click)="onExitConfirmContinue()">
+    <div class="exit-confirm-modal" role="dialog" aria-labelledby="exit-confirm-title" aria-modal="true" (click)="$event.stopPropagation()">
+      <h2 id="exit-confirm-title" class="exit-confirm-title">¿Seguro que quieres irte?</h2>
+      <p class="exit-confirm-body">
+        Antes de que te vayas, queremos decirte que puedes resolver tus dudas desde el número gratuito
+        <strong class="exit-confirm-phone">900 700 010</strong>
+        (de lunes a viernes de 9 a 17 horas).
+      </p>
+      <div class="exit-confirm-actions">
+        <button type="button" class="exit-confirm-btn exit-confirm-btn-primary" (click)="onExitConfirmContinue()">
+          Continuar solicitud
+        </button>
+        <button type="button" class="exit-confirm-btn exit-confirm-btn-secondary" (click)="onExitConfirmLeave()">
+          Salir del proceso
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Vista principal de préstamos -->
   <div class="prestamos-wrapper" *ngIf="prestamoCocheView === 'none'">
@@ -89,7 +114,7 @@
         <h2 class="text-lg font-bold text-slate-900 mb-4 tracking-tight">Contrátalo online</h2>
         
         <!-- Card Préstamo Aprobado -->
-        <div class="loan-card" (click)="onIrASimulacion()">
+        <div class="loan-card" (click)="onIrAPrestamoCoche()">
           <div class="loan-card-icon loan-card-icon-green">
             <i data-lucide="user-check" class="w-5 h-5 stroke-[1.5]"></i>
           </div>
@@ -100,7 +125,7 @@
               <button 
                 type="button"
                 class="loan-card-btn loan-card-btn-primary"
-                (click)="onIrASimulacion(); $event.stopPropagation()"
+                (click)="onIrAPrestamoCoche(); $event.stopPropagation()"
               >
                 Contratar online
               </button>

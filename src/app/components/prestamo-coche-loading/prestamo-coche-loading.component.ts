@@ -9,6 +9,7 @@ declare var lucide: any;
 })
 export class PrestamoCocheLoadingComponent implements AfterViewInit {
   @Input() message: string = 'Preparando la documentación del préstamo';
+  @Input() subtitle: string = '';
 
   ngAfterViewInit(): void {
     if (typeof lucide !== 'undefined') {

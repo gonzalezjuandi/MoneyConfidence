@@ -32,6 +32,7 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
   @Input() loanData?: PrestamoCocheResumenData;
   @Output() back = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
+  @Output() closeRequested = new EventEmitter<void>();
 
   constructor(private viewportScroller: ViewportScroller) {}
 
@@ -53,8 +54,11 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
   selectedBeneficiary = 'Herederos legales';
   availableBeneficiaries = [
     'Herederos legales',
-    'María García Palao',
-    'Laura García'
+    'Banco y restante herederos legales',
+    'Banco y restante cónyuge',
+    'Banco y restante hijos',
+    'Cónyuge',
+    'Hijos'
   ];
 
   // Visor de documentos
@@ -134,6 +138,10 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
 
   onBack(): void {
     this.back.emit();
+  }
+
+  onCloseRequest(): void {
+    this.closeRequested.emit();
   }
 
   onModifyRequest(): void {

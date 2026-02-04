@@ -9,6 +9,8 @@ declare var lucide: any;
 })
 export class PrestamoCocheFirmaComponent implements OnInit, AfterViewInit {
   @Input() loanData?: any;
+  /** true cuando es la pantalla de firma del seguro (seguro-firma) */
+  @Input() isSeguroFirma = false;
   @Output() complete = new EventEmitter<void>();
   @Output() back = new EventEmitter<void>();
 

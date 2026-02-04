@@ -2,14 +2,14 @@
   <div class="prestamo-coche-firma-wrapper">
     <!-- Header sin navegación -->
     <header class="firma-header">
-      <h1 class="firma-title">Firma tu préstamo</h1>
+      <h1 class="firma-title">{{ isSeguroFirma ? 'Firma del seguro' : 'Firma tu préstamo' }}</h1>
     </header>
 
     <!-- Sección de Clave de Firma Digital -->
     <section class="signature-key-section">
       <h2 class="signature-key-title">Clave de Firma Digital</h2>
       <p class="signature-key-instruction">
-        Presiona sobre la clave y arrástrala a la zona inferior para firmar tu operación
+        Presiona sobre la clave y arrástrala a la zona inferior para firmar {{ isSeguroFirma ? 'el seguro' : 'tu operación' }}
       </p>
       
       <!-- Clave de firma (números) -->
@@ -71,7 +71,7 @@
         </header>
         <div class="help-modal-content">
           <p class="help-text">
-            Para firmar tu préstamo digitalmente:
+            Para firmar {{ isSeguroFirma ? 'el seguro' : 'tu préstamo' }} digitalmente:
           </p>
           <ol class="help-list">
             <li>Presiona sobre cada número de la clave de firma mostrada arriba</li>

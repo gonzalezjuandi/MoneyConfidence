@@ -59,6 +59,9 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
   
   // Modal de préstamo reactivo
   showReactiveLoanModal = false;
+
+  // Modal confirmación salir del flujo préstamo con seguro
+  showExitConfirmModal = false;
   
   // Formulario de préstamo reactivo
   reactiveLoanForm = {
@@ -709,6 +712,19 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
         lucide.createIcons();
       }, 100);
     }
+  }
+
+  onCloseRequestedPrestamoCoche(): void {
+    this.showExitConfirmModal = true;
+  }
+
+  onExitConfirmContinue(): void {
+    this.showExitConfirmModal = false;
+  }
+
+  onExitConfirmLeave(): void {
+    this.showExitConfirmModal = false;
+    this.onPrestamoCocheClose();
   }
 
   onPrestamoCocheNext(data?: any): void {
