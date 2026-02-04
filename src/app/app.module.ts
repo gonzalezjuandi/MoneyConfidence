@@ -24,10 +24,12 @@ import { PrestamoCocheFirmaComponent } from './components/prestamo-coche-firma/p
 import { PrestamoCocheSeguroDocumentManagerComponent } from './components/prestamo-coche-seguro-document-manager/prestamo-coche-seguro-document-manager.component';
 import { PrestamoCocheLoadingComponent } from './components/prestamo-coche-loading/prestamo-coche-loading.component';
 import { PrestamoCocheConfirmacionComponent } from './components/prestamo-coche-confirmacion/prestamo-coche-confirmacion.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     WizardComponent,
     PosicionGlobalComponent,
     ContratarComponent,
