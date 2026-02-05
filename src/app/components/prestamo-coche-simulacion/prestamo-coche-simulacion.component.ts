@@ -41,6 +41,12 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   // Modal médico
   showMedicalModal = false;
 
+  // Modal de confirmación: usuario confirma que ha leído y marca "padezco condición médica"
+  showMedicalConfirmModal = false;
+
+  // Si el usuario confirma que padece condición médica, no se muestra ni el bloque de seguro ni su titular/bodycopy
+  hasDeclaredMedicalCondition = false;
+
   // Estado del checkbox del seguro (deshabilitado si rechazó condiciones médicas)
   isInsuranceDisabled = false;
 
@@ -70,11 +76,19 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => {
+    // Asegurar que la pantalla del flujo se muestre siempre desde arriba
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+      const wizard = document.querySelector('.wizard-content');
+      if (wizard) {
+        (wizard as HTMLElement).scrollTop = 0;
+      }
+      if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      }, 100);
-    }
+      }
+    }, 0);
   }
 
   /** Cambio de importe desde el slider (app-amount-slider-galatea): sincroniza con plazos y cuota. */
@@ -407,21 +421,34 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   }
 
   onHasMedicalCondition(): void {
-    // Usuario indica que padece condición médica
-    this.closeMedicalModal();
-    // Quitar el seguro pero permitir volver a seleccionar cuota/seguro
+    // Abrir modal de confirmación (cumplimiento): asegurar que ha leído y marcado correctamente
+    this.showMedicalConfirmModal = true;
+    if (typeof lucide !== 'undefined') {
+      setTimeout(() => lucide.createIcons(), 100);
+    }
+  }
+
+  onConfirmMedicalConditionDeclared(): void {
+    // Usuario confirma en el segundo modal: volver al simulador y ocultar todo el bloque de seguro
+    this.hasDeclaredMedicalCondition = true;
     this.hasInsurance = false;
-    this.isInsuranceDisabled = false;
+    this.showMedicalConfirmModal = false;
+    this.closeMedicalModal();
     this.updateMonthlyPayment();
-    // Mostrar toast de alerta
-    this.showToastNotification(
-      'No es posible contratar el seguro por restricciones y políticas de la aseguradora.',
-      'alert'
-    );
+    this.cdr.detectChanges();
+  }
+
+  onCancelMedicalConditionDeclared(): void {
+    // Volver al primer modal médico sin confirmar
+    this.showMedicalConfirmModal = false;
+    if (typeof lucide !== 'undefined') {
+      setTimeout(() => lucide.createIcons(), 100);
+    }
   }
 
   closeMedicalModal(): void {
     this.showMedicalModal = false;
+    this.showMedicalConfirmModal = false;
     document.body.style.overflow = '';
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {

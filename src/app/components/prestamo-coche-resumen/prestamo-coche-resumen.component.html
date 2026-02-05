@@ -124,7 +124,7 @@
         </div>
         <div class="resumen-item">
           <span class="resumen-label">Persona asegurada</span>
-          <span class="resumen-value">Laura García</span>
+          <span class="resumen-value">{{ data.accountHolder || 'María García Palao' }}</span>
         </div>
         <div class="resumen-item resumen-item-dropdown" (click)="toggleBeneficiaryDropdown()">
           <span class="resumen-label">Beneficiario del seguro</span>
@@ -149,11 +149,19 @@
 
       <!-- Loan Purpose Section -->
       <div class="resumen-section">
-        <div class="resumen-item resumen-item-dropdown">
+        <div class="resumen-item resumen-item-dropdown" (click)="toggleLoanPurposeDropdown()">
           <span class="resumen-label">Motivo del préstamo</span>
           <div class="resumen-value-wrapper">
             <span class="resumen-value">{{ data.loanPurpose || 'Vehículo' }}</span>
-            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showLoanPurposeDropdown"></i>
+          </div>
+          <div class="dropdown-menu" *ngIf="showLoanPurposeDropdown" (click)="$event.stopPropagation()">
+            <div class="dropdown-item" 
+                 *ngFor="let purpose of loanPurposeOptions"
+                 (click)="selectLoanPurpose(purpose)"
+                 [class.selected]="purpose === data.loanPurpose">
+              {{ purpose }}
+            </div>
           </div>
         </div>
       </div>

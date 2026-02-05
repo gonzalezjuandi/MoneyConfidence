@@ -238,7 +238,7 @@
   }
 }
 
-/* Footer */
+/* Footer sticky completamente transparente: se ve todo el contenido debajo */
 .resumen-footer {
   position: fixed;
   bottom: 0;
@@ -246,9 +246,9 @@
   right: 0;
   width: 100%;
   padding: 1.5rem 1.25rem;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  box-shadow: none;
+  border-top: none;
   z-index: 100;
   margin-top: auto;
 }
@@ -547,6 +547,55 @@
 .document-title-section {
   flex: 1;
   text-align: center;
+}
+
+/* Ajustes responsive para el visor de documentación en móvil */
+@media (max-width: 640px) {
+  .document-viewer-content {
+    padding: 1rem;
+  }
+
+  .document-page {
+    padding: 1.5rem 1.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .document-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .document-title-section {
+    text-align: left;
+  }
+
+  .logo-s {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.125rem;
+  }
+
+  .logo-text {
+    font-size: 1.05rem;
+  }
+
+  .document-main-title {
+    font-size: 1.25rem;
+  }
+
+  .document-subtitle {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 0.9375rem;
+  }
+
+  .section-text,
+  .section-text-bold {
+    font-size: 0.8125rem;
+  }
 }
 
 .document-title {

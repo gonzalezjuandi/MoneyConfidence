@@ -43,8 +43,8 @@
   <!-- Préstamo Coche: Loading Seguro -->
   <app-prestamo-coche-loading
     *ngIf="prestamoCocheView === 'seguro-loading'"
-    [message]="'Estamos preparando la documentación del seguro'"
-    [subtitle]="'No te vayas todavía.'">
+    [message]="'Ya has completado la firma del préstamo'"
+    [subtitle]="'Solo te falta la del seguro. No te vayas.'">
   </app-prestamo-coche-loading>
 
   <!-- Préstamo Coche: Gestor Documental Seguro -->
@@ -74,7 +74,8 @@
   <app-prestamo-coche-confirmacion
     *ngIf="prestamoCocheView === 'confirmacion'"
     [loanData]="prestamoCocheData"
-    (next)="onPrestamoCocheConfirmacionNext()">
+    (viewAccount)="onPrestamoCocheVerIngreso()"
+    (goToPosicionGlobal)="onPrestamoCocheConfirmacionNext()">
   </app-prestamo-coche-confirmacion>
 
   <!-- Modal: ¿Seguro que quieres irte? (al pulsar X en flujo préstamo con seguro) -->

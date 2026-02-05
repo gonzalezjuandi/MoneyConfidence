@@ -9,7 +9,8 @@ declare var lucide: any;
 })
 export class PrestamoCocheConfirmacionComponent implements OnInit, AfterViewInit {
   @Input() loanData?: any;
-  @Output() next = new EventEmitter<void>();
+  @Output() viewAccount = new EventEmitter<void>();
+  @Output() goToPosicionGlobal = new EventEmitter<void>();
 
   showDetails = true;
 
@@ -34,11 +35,19 @@ export class PrestamoCocheConfirmacionComponent implements OnInit, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => {
+    // Asegurar que la pantalla del flujo se muestre siempre desde arriba
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+      const wizard = document.querySelector('.wizard-content');
+      if (wizard) {
+        (wizard as HTMLElement).scrollTop = 0;
+      }
+      if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      }, 100);
-    }
+      }
+    }, 0);
   }
 
   toggleDetails(): void {
@@ -52,12 +61,12 @@ export class PrestamoCocheConfirmacionComponent implements OnInit, AfterViewInit
 
   onVerIngreso(): void {
     // Navegar a la cuenta o mostrar detalles del ingreso
-    this.next.emit();
+    this.viewAccount.emit();
   }
 
   onIrAPosicionGlobal(): void {
     // Navegar a posición global
-    this.next.emit();
+    this.goToPosicionGlobal.emit();
   }
 
   get formattedAmount(): string {

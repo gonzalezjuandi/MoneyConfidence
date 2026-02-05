@@ -21,11 +21,19 @@ export class PrestamoCocheOnboardingComponent implements AfterViewInit {
   seguroFaqs = SEGURO_FAQS;
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => {
+    // Asegurar que la pantalla del flujo se muestre siempre desde arriba
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+      const wizard = document.querySelector('.wizard-content');
+      if (wizard) {
+        (wizard as HTMLElement).scrollTop = 0;
+      }
+      if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      }, 100);
-    }
+      }
+    }, 0);
   }
 
   onSimularCuota(): void {

@@ -61,6 +61,20 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
     'Hijos'
   ];
 
+  // Dropdown de motivo del préstamo
+  showLoanPurposeDropdown = false;
+  loanPurposeOptions: string[] = [
+    'Vehículo',
+    'Imprevisto familiar',
+    'Viajes',
+    'Salud',
+    'Muebles y electrodomésticos',
+    'Celebración',
+    'Impuestos',
+    'Reparaciones de vehículo',
+    'Estudios'
+  ];
+
   // Visor de documentos
   showDocumentViewer = false;
   documentZoom = 100;
@@ -152,6 +166,7 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
   toggleAccountDropdown(): void {
     this.showAccountDropdown = !this.showAccountDropdown;
     this.showBeneficiaryDropdown = false;
+    this.showLoanPurposeDropdown = false;
   }
 
   selectAccount(account: string): void {
@@ -167,11 +182,33 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
   toggleBeneficiaryDropdown(): void {
     this.showBeneficiaryDropdown = !this.showBeneficiaryDropdown;
     this.showAccountDropdown = false;
+    this.showLoanPurposeDropdown = false;
   }
 
   selectBeneficiary(beneficiary: string): void {
     this.selectedBeneficiary = beneficiary;
     this.showBeneficiaryDropdown = false;
+    if (typeof lucide !== 'undefined') {
+      setTimeout(() => {
+        lucide.createIcons();
+      }, 100);
+    }
+  }
+
+  toggleLoanPurposeDropdown(): void {
+    this.showLoanPurposeDropdown = !this.showLoanPurposeDropdown;
+    this.showAccountDropdown = false;
+    this.showBeneficiaryDropdown = false;
+  }
+
+  selectLoanPurpose(purpose: string): void {
+    this.showLoanPurposeDropdown = false;
+    // Guardar el motivo en los datos del préstamo para que llegue a confirmación
+    if (this.loanData) {
+      this.loanData.loanPurpose = purpose;
+    } else {
+      this.defaultData.loanPurpose = purpose;
+    }
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {
         lucide.createIcons();

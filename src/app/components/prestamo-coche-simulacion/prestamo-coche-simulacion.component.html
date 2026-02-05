@@ -74,8 +74,12 @@
         <div class="payment-summary-rates">TIN {{ tin.toFixed(2) }} % anual TAE {{ tae.toFixed(2) }}%</div>
       </div>
 
-      <!-- Insurance Section: consentimiento si importe no es múltiplo de 500 -->
-      <div class="form-section" *ngIf="!amountIsMultipleOf500 && !userAcceptedDataShare">
+      <!-- Importe no múltiplo de 500: titular y body como en múltiplo de 500, luego card de consentimiento -->
+      <div class="form-section" *ngIf="!hasDeclaredMedicalCondition && !amountIsMultipleOf500 && !userAcceptedDataShare">
+        <h3 class="form-section-title">¿Quieres asegurar tu préstamo?</h3>
+        <p class="insurance-description">
+          El seguro cubre al titular del préstamo y las garantías son por fallecimiento e incapacidad absoluta.
+        </p>
         <div class="insurance-consent-container">
           <h3 class="insurance-consent-title">Necesitamos compartir tus datos con la compañía aseguradora.</h3>
           <p class="insurance-consent-body">
@@ -86,13 +90,13 @@
                    class="insurance-consent-checkbox"
                    [checked]="dataShareAccepted"
                    (change)="onDataShareCheckChange($event)">
-            <span class="insurance-consent-checkbox-text">Acepto compartir mis datos con la aseguradora</span>
+            <span class="insurance-consent-checkbox-text">Estoy interesado en conocer el precio personalizado del seguro Protección Vida Capital Constante que se comercializa junto al préstamo.</span>
           </label>
         </div>
       </div>
 
       <!-- Mini carga del módulo seguro (tras aceptar compartir datos) -->
-      <div class="form-section insurance-loading-section" *ngIf="!amountIsMultipleOf500 && userAcceptedDataShare && loadingInsuranceQuote">
+      <div class="form-section insurance-loading-section" *ngIf="!hasDeclaredMedicalCondition && !amountIsMultipleOf500 && userAcceptedDataShare && loadingInsuranceQuote">
         <div class="insurance-quote-loading">
           <div class="insurance-quote-spinner"></div>
           <p class="insurance-quote-loading-text">Calculando precio del seguro...</p>
@@ -100,7 +104,7 @@
       </div>
 
       <!-- Insurance Section: check del seguro (múltiplo de 500 o tras aceptar datos) -->
-      <div class="form-section" *ngIf="amountIsMultipleOf500 || (userAcceptedDataShare && !loadingInsuranceQuote)">
+      <div class="form-section" *ngIf="!hasDeclaredMedicalCondition && (amountIsMultipleOf500 || (userAcceptedDataShare && !loadingInsuranceQuote))">
         <h3 class="form-section-title">¿Quieres asegurar tu préstamo?</h3>
         <p class="insurance-description">
           El seguro cubre al titular del préstamo y las garantías son por fallecimiento e incapacidad absoluta.
@@ -128,6 +132,21 @@
               </a>
             </div>
           </label>
+        </div>
+      </div>
+
+      <!-- Texto legal: cuando ha elegido el seguro (Situación 1) o cuando se muestra el card de consentimiento (Situación 2) -->
+      <div class="form-section insurance-legal-block" *ngIf="!hasDeclaredMedicalCondition && (hasInsurance || (!amountIsMultipleOf500 && !userAcceptedDataShare))">
+        <div class="insurance-legal-row">
+          <i data-lucide="info" class="insurance-legal-icon" aria-hidden="true"></i>
+          <!-- Situación 1: cuando se muestra la opción de seguro (múltiplo de 500 o tras aceptar compartir datos) -->
+          <p class="insurance-legal-text" *ngIf="amountIsMultipleOf500 || (userAcceptedDataShare && !loadingInsuranceQuote)">
+            Si estás interesado en contratar el seguro, te informamos de que todo el proceso y las gestiones relacionadas con dicho seguro serán realizadas por la aseguradora BancSabadell Vida. Asimismo, te informamos de que dicha aseguradora tratará tus datos personales, dependiendo del riesgo también tus datos de salud, para la valoración y tarificación del riesgo, en base a la ejecución de medidas precontractuales y en tu consentimiento al añadir el producto de seguro. Puedes ejercer tus derechos y obtener más información en: www.sabadellsegurosypensiones.com.
+          </p>
+          <!-- Situación 2: cuando se muestra el card de consentimiento (solicitar precio personalizado) -->
+          <p class="insurance-legal-text" *ngIf="!amountIsMultipleOf500 && (!userAcceptedDataShare || loadingInsuranceQuote)">
+            Si estás interesado en conocer el precio personalizado del seguro, el Banco comunicará a BancSabadell Vida tus datos identificativos y los relacionados con el préstamo con el fin de facilitarte el precio. Podrás ejercer tus derechos a través del correo electrónico Proteccióndatos_BSVida.com y tienes más información de protección de datos en la página web www.sabadellsegurosypensiones.com
+          </p>
         </div>
       </div>
     </main>
@@ -204,6 +223,28 @@
                   class="medical-modal-btn medical-modal-btn-secondary"
                   (click)="onHasMedicalCondition()">
             Padezco alguna condición médica
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Dialog de confirmación sobre el modal médico -->
+    <div class="medical-confirm-overlay" *ngIf="showMedicalConfirmModal" role="dialog" aria-labelledby="medical-confirm-title" aria-modal="true">
+      <div class="medical-confirm-dialog" (click)="$event.stopPropagation()">
+        <h2 id="medical-confirm-title" class="medical-confirm-title">¿Confirmas tu declaración?</h2>
+        <p class="medical-confirm-body">
+          Confirmas que padeces o has padecido alguna de las condiciones indicadas. No podrás volver a intentarlo en esta solicitud.
+        </p>
+        <footer class="medical-confirm-footer">
+          <button type="button"
+                  class="medical-modal-btn medical-modal-btn-primary"
+                  (click)="onConfirmMedicalConditionDeclared()">
+            Confirmar
+          </button>
+          <button type="button"
+                  class="medical-modal-btn medical-modal-btn-secondary"
+                  (click)="onCancelMedicalConditionDeclared()">
+            Volver
           </button>
         </footer>
       </div>

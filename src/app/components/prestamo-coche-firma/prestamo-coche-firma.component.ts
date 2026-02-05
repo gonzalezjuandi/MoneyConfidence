@@ -21,9 +21,6 @@ export class PrestamoCocheFirmaComponent implements OnInit, AfterViewInit {
   // Estado del input
   inputValue = '';
   inputMask = '••••••';
-  isDragging = false;
-  draggedDigit: string | null = null;
-  draggedIndex: number | -1 = -1;
 
   // Estado de ayuda
   showHelp = false;
@@ -34,11 +31,19 @@ export class PrestamoCocheFirmaComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => {
+    // Asegurar que la pantalla del flujo se muestre siempre desde arriba
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+      const wizard = document.querySelector('.wizard-content');
+      if (wizard) {
+        (wizard as HTMLElement).scrollTop = 0;
+      }
+      if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      }, 100);
-    }
+      }
+    }, 0);
   }
 
   shuffleKey(): void {
@@ -51,123 +56,75 @@ export class PrestamoCocheFirmaComponent implements OnInit, AfterViewInit {
     this.signatureKeyArray = shuffled;
   }
 
-  onDigitMouseDown(event: MouseEvent, digit: string, index: number): void {
-    if (this.inputValue.length >= 6) return;
-    
-    this.isDragging = true;
-    this.draggedDigit = digit;
-    this.draggedIndex = index;
-    event.preventDefault();
-    
-    // Agregar listeners globales
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseUp);
+  /** Arrastre del bloque completo de dígitos (HTML5 DnD) */
+  onKeyDragStart(event: DragEvent): void {
+    if (!event.dataTransfer) return;
+    event.dataTransfer.setData('text/plain', this.signatureKey);
+    event.dataTransfer.effectAllowed = 'copy';
   }
 
-  onDigitTouchStart(event: TouchEvent, digit: string, index: number): void {
-    if (this.inputValue.length >= 6) return;
-    
-    this.isDragging = true;
-    this.draggedDigit = digit;
-    this.draggedIndex = index;
-    event.preventDefault();
-    
-    // Agregar listeners globales
-    document.addEventListener('touchmove', this.onTouchMove);
-    document.addEventListener('touchend', this.onTouchEnd);
+  onKeyDragEnd(): void {
+    // Opcional: quitar clase visual si se usara
   }
 
-  onMouseMove = (event: MouseEvent): void => {
-    if (!this.isDragging) return;
-    // La lógica de arrastre se maneja en el drop
-  };
-
-  onTouchMove = (event: TouchEvent): void => {
-    if (!this.isDragging) return;
+  onDropZoneDragOver(event: DragEvent): void {
     event.preventDefault();
-  };
-
-  onMouseUp = (event: MouseEvent): void => {
-    if (!this.isDragging) return;
-    
-    const target = event.target as HTMLElement;
-    const dropZone = document.querySelector('.signature-drop-zone');
-    
-    if (dropZone && dropZone.contains(target)) {
-      this.handleDrop();
+    event.stopPropagation();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'copy';
     }
-    
-    this.resetDrag();
-  };
+  }
 
-  onTouchEnd = (event: TouchEvent): void => {
-    if (!this.isDragging) return;
-    
-    const touch = event.changedTouches[0];
-    const target = document.elementFromPoint(touch.clientX, touch.clientY);
-    const dropZone = document.querySelector('.signature-drop-zone');
-    
-    if (dropZone && target && dropZone.contains(target)) {
-      this.handleDrop();
-    }
-    
-    this.resetDrag();
-  };
+  onDropZoneDragLeave(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  onKeyDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.handleDrop();
+  }
 
   handleDrop(): void {
-    if (this.draggedDigit && this.inputValue.length < 6) {
-      this.inputValue += this.draggedDigit;
+    // En el prototipo, al arrastrar a la zona inferior se considera
+    // que se han arrastrado TODOS los dígitos de la clave a la vez.
+    if (this.inputValue.length === 0) {
+      this.inputValue = this.signatureKey;
       this.updateInputMask();
-      
-      // Remover el dígito usado de la clave
-      if (this.draggedIndex !== -1) {
-        this.signatureKeyArray.splice(this.draggedIndex, 1);
-      }
-      
-      // Si se completó, verificar
-      if (this.inputValue.length === 6) {
-        this.verifySignature();
-      }
-    }
-  }
-
-  resetDrag(): void {
-    this.isDragging = false;
-    this.draggedDigit = null;
-    this.draggedIndex = -1;
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    document.removeEventListener('touchmove', this.onTouchMove);
-    document.removeEventListener('touchend', this.onTouchEnd);
-  }
-
-  onDigitClick(digit: string, index: number): void {
-    if (this.inputValue.length >= 6) return;
-    
-    this.inputValue += digit;
-    this.updateInputMask();
-    
-    // Remover el dígito usado
-    this.signatureKeyArray.splice(index, 1);
-    
-    // Si se completó, verificar
-    if (this.inputValue.length === 6) {
       this.verifySignature();
     }
   }
 
-  onInputFocus(): void {
-    // No permitir edición manual del input
-    const input = document.querySelector('.signature-input') as HTMLInputElement;
-    if (input) {
-      input.blur();
+  onDigitClick(digit: string, index: number): void {
+    // En el prototipo, al hacer clic en cualquier dígito se considera
+    // que se utiliza la clave completa de una sola vez.
+    if (this.inputValue.length === 0) {
+      this.inputValue = this.signatureKey;
+      this.updateInputMask();
+      this.verifySignature();
     }
   }
 
-  onInputClick(): void {
-    // Mostrar mensaje de que debe usar la clave
-    if (this.inputValue.length === 0) {
-      // Opcional: mostrar un mensaje
+  /** Escribir la clave con teclado: solo dígitos, máximo 6 */
+  onSignatureInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const raw = (input.value || '').replace(/\D/g, '').slice(0, 6);
+    this.inputValue = raw;
+    input.value = raw;
+    this.updateInputMask();
+  }
+
+  /** Permitir solo teclas numéricas y navegación */
+  onSignatureKeydown(event: KeyboardEvent): void {
+    const key = event.key;
+    if (['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) {
+      return;
+    }
+    if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(key.toLowerCase())) {
+      return;
+    }
+    if (!/^\d$/.test(key)) {
+      event.preventDefault();
     }
   }
 

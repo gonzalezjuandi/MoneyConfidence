@@ -5,7 +5,7 @@ declare var lucide: any;
 export interface SeguroDocumentData {
   id: string;
   title: string;
-  type: 'precontractual' | 'salud' | 'solicitud';
+  type: 'precontractual' | 'descanso' | 'salud' | 'solicitud';
   content: string;
   read: boolean;
 }
@@ -30,21 +30,41 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
   }
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => {
+    // Asegurar que la pantalla del flujo se muestre siempre desde arriba
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+      const wizard = document.querySelector('.wizard-content');
+      if (wizard) {
+        (wizard as HTMLElement).scrollTop = 0;
+      }
+      if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      }, 100);
-    }
-    this.setupScrollListener();
+      }
+      this.setupScrollListener();
+    }, 0);
   }
 
   initializeDocuments(): void {
+    const loanAmount = this.loanData?.amount || 45000;
+    const termMonths = this.loanData?.termMonths || 96;
+    const monthlyPayment = this.loanData?.monthlyPayment || 550.52;
+    const insuranceCost = this.loanData?.insuranceMonthlyReceipt || 11.20;
+
     this.documents = [
       {
         id: 'precontractual-seguro',
         title: 'Información precontractual del seguro',
         type: 'precontractual',
         content: this.getPrecontractualContent(),
+        read: false
+      },
+      {
+        id: 'descanso-seguro',
+        title: 'Resumen del seguro',
+        type: 'descanso',
+        content: this.getDescansoSeguroContent(loanAmount, termMonths, monthlyPayment, insuranceCost),
         read: false
       },
       {
@@ -93,7 +113,8 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
   }
 
   get canContinue(): boolean {
-    return this.hasScrolledToBottom;
+    // En el documento de descanso no obligamos a hacer scroll completo
+    return this.hasScrolledToBottom || this.currentDocument.type === 'descanso';
   }
 
   onMarkAsRead(): void {
@@ -206,6 +227,77 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
     `;
   }
 
+  getDescansoSeguroContent(amount: number, termMonths: number, monthlyPayment: number, insuranceCost: number): string {
+    return `
+      <div class="document-header">
+        <div class="document-logo">
+          <span class="logo-s">S</span>
+          <span class="logo-text">Sabadell</span>
+        </div>
+      </div>
+      
+      <h1 class="document-main-title">RESUMEN DEL SEGURO</h1>
+      
+      <div class="descanso-content">
+        <div class="descanso-card">
+          <h3 class="descanso-card-title">Préstamo Preconcedido</h3>
+          <div class="descanso-data">
+            <div class="descanso-item">
+              <span class="descanso-label">Importe</span>
+              <span class="descanso-value">
+                ${amount.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+              </span>
+            </div>
+            <div class="descanso-item">
+              <span class="descanso-label">Plazo</span>
+              <span class="descanso-value">
+                ${Math.round(termMonths / 12)} años (${termMonths} meses)
+              </span>
+            </div>
+            <div class="descanso-item">
+              <span class="descanso-label">Cuota mensual</span>
+              <span class="descanso-value highlight">
+                ${monthlyPayment.toFixed(2).replace('.', ',')} €
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="descanso-card">
+          <h3 class="descanso-card-title">Seguro Protección Vida</h3>
+          <div class="descanso-data">
+            <div class="descanso-item">
+              <span class="descanso-label">Prima mensual</span>
+              <span class="descanso-value highlight">
+                ${insuranceCost.toFixed(2).replace('.', ',')} €
+              </span>
+            </div>
+            <div class="descanso-item">
+              <span class="descanso-label">Capital asegurado</span>
+              <span class="descanso-value">100% del importe del préstamo</span>
+            </div>
+            <div class="descanso-item">
+              <span class="descanso-label">Coberturas</span>
+              <span class="descanso-value">Fallecimiento e Incapacidad Permanente Absoluta</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="descanso-info">
+          <p class="descanso-text">
+            Antes de continuar con la firma del seguro, revisa detenidamente la información 
+            del préstamo y del seguro. Asegúrate de que todos los datos son correctos y que 
+            comprendes las condiciones del seguro.
+          </p>
+          <p class="descanso-text">
+            Una vez que procedas con la firma digital, el seguro quedará formalizado y 
+            comenzará su vigencia junto con el préstamo.
+          </p>
+        </div>
+      </div>
+    `;
+  }
+
   getDeclaracionSaludContent(): string {
     return `
       <div class="document-header">
@@ -254,6 +346,7 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
   }
 
   getSolicitudSeguroContent(): string {
+    const holderName = this.loanData?.accountHolder || 'María García Palao';
     return `
       <div class="document-header">
         <div class="document-logo">
@@ -280,7 +373,7 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
       <div class="document-section">
         <h3 class="section-title">SOLICITUD DE SEGURO</h3>
         <p class="section-text">
-          <strong>Solicitante:</strong> María García Palao<br>
+          <strong>Solicitante:</strong> ${holderName}<br>
           <strong>DNI/NIE:</strong> 12345678A<br>
           <strong>Producto:</strong> Seguro Protección Vida Capital Constante<br>
           <strong>Compañía:</strong> Zurich Vida, Compañía de Seguros y Reaseguros, S.A.

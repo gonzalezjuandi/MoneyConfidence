@@ -168,6 +168,13 @@
   padding: 1.25rem 0 0 0;
 }
 
+.insurance-option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .insurance-label {
   font-size: 0.875rem;
   color: #64748b;
@@ -177,6 +184,12 @@
   font-size: 0.875rem;
   font-weight: 700;
   color: #0f172a;
+}
+
+.confirmacion-submessage-inline {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin: 0;
 }
 
 /* Actions */

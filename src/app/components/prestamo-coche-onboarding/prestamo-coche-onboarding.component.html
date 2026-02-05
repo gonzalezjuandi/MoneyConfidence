@@ -44,13 +44,6 @@
         </div>
       </div>
 
-      <!-- Informational Text Block -->
-      <div class="info-block">
-        <p class="info-text">
-          Las cuotas mensuales se calculan según tu perfil y las condiciones del préstamo.
-        </p>
-      </div>
-
       <!-- Loan Application Process Section -->
       <div class="process-section">
         <h3 class="process-title">Conseguir tu préstamo es muy sencillo:</h3>
@@ -81,9 +74,19 @@
           </div>
         </div>
       </div>
+
+      <!-- Más información (en contenido, debajo del proceso) -->
+      <div class="onboarding-more-info">
+        <a
+          href="#"
+          class="onboarding-link"
+          (click)="onOpenFaq(); $event.preventDefault()">
+          Más información
+        </a>
+      </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer sticky transparente -->
     <footer class="onboarding-footer">
       <button
         type="button"
@@ -91,12 +94,6 @@
         (click)="onSimularCuota()">
         Simular cuota
       </button>
-      <a
-        href="#"
-        class="onboarding-link"
-        (click)="onOpenFaq(); $event.preventDefault()">
-        Más información
-      </a>
     </footer>
 
     <!-- Modal full-screen FAQs -->

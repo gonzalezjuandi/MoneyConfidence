@@ -10,7 +10,7 @@
       </div>
       <h1 class="confirmacion-title">¡Enhorabuena!</h1>
       <p class="confirmacion-message">
-        ¡Ya tienes los {{ formattedAmount }} € en tu cuenta! ¿Has visto qué fácil ha sido?
+        Hemos realizado el ingreso de {{ formattedAmount }} € en tu cuenta. Gracias por confiar en nosotros.
       </p>
     </div>
 
@@ -47,10 +47,15 @@
         </div>
 
         <div class="insurance-option" *ngIf="data.hasInsurance">
-          <span class="insurance-label">
-            Seguro Protección Vida capital constante:
-          </span>
-          <span class="insurance-value">{{ formattedInsuranceCost }} € mensual</span>
+          <div class="insurance-option-header">
+            <span class="insurance-label">
+              Seguro Protección Vida capital constante:
+            </span>
+            <span class="insurance-value">{{ formattedInsuranceCost }} € mensual</span>
+          </div>
+          <p class="confirmacion-submessage-inline">
+            La contratación de su seguro está solicitada; en breve se lo cargaremos en su cuenta.
+          </p>
         </div>
       </div>
     </div>

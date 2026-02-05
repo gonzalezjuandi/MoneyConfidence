@@ -12,13 +12,13 @@
         Presiona sobre la clave y arrástrala a la zona inferior para firmar {{ isSeguroFirma ? 'el seguro' : 'tu operación' }}
       </p>
       
-      <!-- Clave de firma (números) -->
-      <div class="signature-key-digits">
+      <!-- Clave de firma (números): se arrastra todo el bloque a la vez -->
+      <div class="signature-key-digits"
+           draggable="true"
+           (dragstart)="onKeyDragStart($event)"
+           (dragend)="onKeyDragEnd()">
         <div class="signature-digit"
              *ngFor="let digit of signatureKeyArray; let i = index"
-             [class.dragging]="isDragging && draggedIndex === i"
-             (mousedown)="onDigitMouseDown($event, digit, i)"
-             (touchstart)="onDigitTouchStart($event, digit, i)"
              (click)="onDigitClick(digit, i)">
           {{ digit }}
         </div>
@@ -32,18 +32,23 @@
       </a>
     </section>
 
-    <!-- Sección de Input -->
+    <!-- Sección de Input: permite escribir con teclado o soltar la clave arrastrada -->
     <section class="signature-input-section">
       <label class="signature-input-label">Introduce la clave de Firma Digital</label>
       <div class="signature-input-wrapper">
-        <div class="signature-drop-zone">
+        <div class="signature-drop-zone"
+             (dragover)="onDropZoneDragOver($event)"
+             (drop)="onKeyDrop($event)"
+             (dragleave)="onDropZoneDragLeave($event)">
           <input type="text"
                  class="signature-input"
-                 [value]="inputMask"
-                 readonly
-                 (focus)="onInputFocus()"
-                 (click)="onInputClick()"
-                 maxlength="6">
+                 [value]="inputValue"
+                 (input)="onSignatureInput($event)"
+                 (keydown)="onSignatureKeydown($event)"
+                 inputmode="numeric"
+                 maxlength="6"
+                 placeholder="••••••"
+                 autocomplete="one-time-code">
         </div>
       </div>
     </section>

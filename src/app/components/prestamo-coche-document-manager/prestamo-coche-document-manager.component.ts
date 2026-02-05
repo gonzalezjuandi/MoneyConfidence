@@ -33,12 +33,20 @@ export class PrestamoCocheDocumentManagerComponent implements OnInit, AfterViewI
   }
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => {
+    // Asegurar que la pantalla del flujo se muestre siempre desde arriba
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+      const wizard = document.querySelector('.wizard-content');
+      if (wizard) {
+        (wizard as HTMLElement).scrollTop = 0;
+      }
+      if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      }, 100);
-    }
-    this.setupScrollListener();
+      }
+      this.setupScrollListener();
+    }, 0);
   }
 
   initializeDocuments(): void {
@@ -165,6 +173,7 @@ export class PrestamoCocheDocumentManagerComponent implements OnInit, AfterViewI
   }
 
   getSolicitudContent(amount: number, termMonths: number, monthlyPayment: number, tin: number, tae: number): string {
+    const holderName = this.loanData?.accountHolder || 'María García Palao';
     return `
       <div class="document-header">
         <div class="document-logo">
@@ -180,7 +189,7 @@ export class PrestamoCocheDocumentManagerComponent implements OnInit, AfterViewI
           <strong>Fecha de solicitud:</strong> ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}
         </p>
         <p class="section-text">
-          <strong>Solicitante:</strong> María García Palao
+          <strong>Solicitante:</strong> ${holderName}
         </p>
         <p class="section-text">
           <strong>DNI/NIE:</strong> 12345678A

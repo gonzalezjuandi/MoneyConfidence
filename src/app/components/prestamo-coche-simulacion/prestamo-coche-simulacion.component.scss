@@ -258,12 +258,47 @@
 }
 
 /* Insurance Section */
-// Contenedor consentimiento compartir datos (importe no múltiplo de 500)
+// Texto legal del seguro (debajo del módulo de préstamo)
+.insurance-legal-block {
+  margin-bottom: 0;
+}
+
+.insurance-legal-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.insurance-legal-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  color: #64748b;
+}
+
+.insurance-legal-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+// Contenedor consentimiento (importe no múltiplo de 500): mismo titular/body legal + checkbox precio personalizado
 .insurance-consent-container {
   background: #ffffff;
   border-radius: 1rem;
   padding: 1.25rem 1.25rem 1.5rem;
   border: 1px solid #e2e8f0;
+}
+
+.insurance-consent-legal {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
 }
 
 .insurance-consent-title {
@@ -764,6 +799,52 @@
   animation: fadeIn 0.2s ease;
 }
 
+/* Dialog de confirmación sobre el modal médico */
+.medical-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.5);
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.medical-confirm-dialog {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 360px;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.medical-confirm-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.medical-confirm-body {
+  font-size: 0.9375rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+}
+
+.medical-confirm-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -904,7 +985,7 @@
   }
 }
 
-/* Footer */
+/* Footer sticky completamente transparente: se ve todo el contenido debajo */
 .simulacion-footer {
   position: fixed;
   bottom: 0;
@@ -912,9 +993,9 @@
   right: 0;
   width: 100%;
   padding: 1.5rem 1.25rem;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  box-shadow: none;
+  border-top: none;
   z-index: 100;
 }
 

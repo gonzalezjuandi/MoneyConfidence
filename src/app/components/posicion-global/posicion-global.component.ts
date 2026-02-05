@@ -13,6 +13,53 @@ export class PosicionGlobalComponent implements AfterViewInit, OnDestroy, OnInit
   @Output() goToPotencialFinanciero = new EventEmitter<void>();
   private iconsInitialized = false;
 
+  // Vista interna: dashboard general o detalle de cuentas
+  view: 'dashboard' | 'accounts' = 'dashboard';
+  selectedAccount: 'principal' | 'familiar' = 'principal';
+
+  // Saldos base de las cuentas
+  private readonly saldoCuentaPrincipalBase = 35000;
+  private readonly saldoCuentaFamiliarBase = 5800;
+
+  saldoCuentaPrincipal = this.saldoCuentaPrincipalBase;
+  saldoCuentaFamiliar = this.saldoCuentaFamiliarBase;
+  saldoTotal = this.saldoCuentaPrincipalBase + this.saldoCuentaFamiliarBase;
+
+  // Movimiento del préstamo completado
+  showLoanMovement = false;
+  lastLoanAmount: number | null = null;
+
+  get saldoTotalFormatted(): string {
+    return this.saldoTotal.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  get saldoCuentaPrincipalFormatted(): string {
+    return this.saldoCuentaPrincipal.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  get saldoCuentaFamiliarFormatted(): string {
+    return this.saldoCuentaFamiliar.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  get lastLoanAmountFormatted(): string {
+    if (!this.lastLoanAmount) {
+      return '0,00';
+    }
+    return this.lastLoanAmount.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
   constructor(
     private cdr: ChangeDetectorRef,
     private wizardState: WizardStateService
@@ -23,7 +70,29 @@ export class PosicionGlobalComponent implements AfterViewInit, OnDestroy, OnInit
     this.initializeIcons();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Escuchar cambios para reflejar el préstamo completado en las cuentas
+    this.wizardState.state$.subscribe(state => {
+      const loanAmount = state.loanCompleted && state.loanAmount ? state.loanAmount : 0;
+
+      this.saldoCuentaPrincipal = this.saldoCuentaPrincipalBase + loanAmount;
+      this.saldoCuentaFamiliar = this.saldoCuentaFamiliarBase;
+      this.saldoTotal = this.saldoCuentaPrincipal + this.saldoCuentaFamiliar;
+
+      this.showLoanMovement = !!state.loanCompleted && !!state.loanAmount;
+      this.lastLoanAmount = state.loanAmount ?? null;
+      this.cdr.markForCheck();
+    });
+
+    // Si venimos desde la confirmación de préstamo con "Ver ingreso en la cuenta",
+    // abrir directamente la vista de cuentas de la cuenta principal
+    const openAccounts = sessionStorage.getItem('open-accounts-from-loan');
+    if (openAccounts === 'true') {
+      sessionStorage.removeItem('open-accounts-from-loan');
+      this.view = 'accounts';
+      this.selectedAccount = 'principal';
+    }
+  }
 
   ngOnDestroy(): void {
     // Limpiar iconos si es necesario
@@ -33,7 +102,7 @@ export class PosicionGlobalComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   private initializeIcons(): void {
-    if (typeof lucide !== 'undefined' && !this.iconsInitialized) {
+    if (typeof lucide !== 'undefined') {
       // Esperar a que Angular termine de renderizar
       setTimeout(() => {
         try {
@@ -58,6 +127,57 @@ export class PosicionGlobalComponent implements AfterViewInit, OnDestroy, OnInit
 
   onIrAContratar(): void {
     this.next.emit();
+  }
+
+  // Navegar a la posición de cuentas desde las filas de Cuenta Sabadell / Cuenta familiar
+  onVerPosicionCuentaPrincipal(): void {
+    this.view = 'accounts';
+    this.selectedAccount = 'principal';
+    this.initializeIcons();
+    this.cdr.markForCheck();
+  }
+
+  onVerPosicionCuentaFamiliar(): void {
+    this.view = 'accounts';
+    this.selectedAccount = 'familiar';
+    this.initializeIcons();
+    this.cdr.markForCheck();
+  }
+
+  onVolverDesdePosicionCuentas(): void {
+    this.view = 'dashboard';
+    this.initializeIcons();
+    this.cdr.markForCheck();
+  }
+
+  selectAccount(type: 'principal' | 'familiar'): void {
+    if (this.selectedAccount !== type) {
+      this.selectedAccount = type;
+      this.initializeIcons();
+      this.cdr.markForCheck();
+    }
+  }
+
+  onAccountsCarouselScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target) {
+      return;
+    }
+
+    const scrollLeft = target.scrollLeft;
+    const maxScroll = target.scrollWidth - target.clientWidth;
+
+    if (maxScroll <= 0) {
+      return;
+    }
+
+    const ratio = scrollLeft / maxScroll;
+    const newSelected: 'principal' | 'familiar' = ratio > 0.5 ? 'familiar' : 'principal';
+
+    if (newSelected !== this.selectedAccount) {
+      this.selectedAccount = newSelected;
+      this.cdr.markForCheck();
+    }
   }
 
   onIrAPotencialFinanciero(): void {

@@ -859,9 +859,20 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
     if (this.prestamoCocheData && this.prestamoCocheData.amount) {
       this.wizardState.markLoanCompleted(this.prestamoCocheData.amount);
     }
-    // Navegar a posición global o finalizar
+    // Cerrar flujo de préstamo y llevar al inicio (Posición Global)
     this.prestamoCocheView = 'none';
-    // TODO: Navegar a posición global
+    this.wizardState.setCurrentStep(1);
+  }
+
+  onPrestamoCocheVerIngreso(): void {
+    // Marcar el préstamo como completado e ir al inicio mostrando la cuenta
+    if (this.prestamoCocheData && this.prestamoCocheData.amount) {
+      this.wizardState.markLoanCompleted(this.prestamoCocheData.amount);
+    }
+    this.prestamoCocheView = 'none';
+    this.wizardState.setCurrentStep(1);
+    // Señal para abrir directamente la vista de cuentas desde Posición Global (opcional)
+    sessionStorage.setItem('open-accounts-from-loan', 'true');
   }
 
   onPrestamoCocheFirmaBack(): void {
