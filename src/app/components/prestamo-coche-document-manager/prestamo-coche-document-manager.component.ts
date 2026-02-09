@@ -325,6 +325,7 @@ export class PrestamoCocheDocumentManagerComponent implements OnInit, AfterViewI
           Email: info&#64;bancsabadell.com
         </p>
       </div>
+
     `;
   }
 
@@ -439,8 +440,7 @@ export class PrestamoCocheDocumentManagerComponent implements OnInit, AfterViewI
       <div class="document-section">
         <h3 class="section-title">CLÁUSULA CUARTA. COMISIONES</h3>
         <p class="section-text">
-          <strong>Comisión de apertura:</strong> 220,00 €, que se cargará en el momento de 
-          la formalización del contrato.
+          <strong>Comisión de apertura:</strong> 0,00 €. Sin comisión de apertura.
         </p>
         <p class="section-text">
           <strong>Comisión por cancelación anticipada:</strong> El 1,00% del importe reembolsado 

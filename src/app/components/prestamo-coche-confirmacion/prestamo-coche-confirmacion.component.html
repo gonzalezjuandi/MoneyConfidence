@@ -19,7 +19,7 @@
       <button type="button" 
               class="details-toggle"
               (click)="toggleDetails()">
-        <span class="details-title">Ver detalles del préstamo</span>
+        <span class="details-title">Ver detalles de la solicitud</span>
         <i data-lucide="chevron-up" 
            class="details-chevron"
            [class.rotated]="!showDetails"></i>
@@ -47,14 +47,19 @@
         </div>
 
         <div class="insurance-option" *ngIf="data.hasInsurance">
-          <div class="insurance-option-header">
-            <span class="insurance-label">
-              Seguro Protección Vida capital constante:
-            </span>
-            <span class="insurance-value">{{ formattedInsuranceCost }} € mensual</span>
+          <h4 class="insurance-title">Seguro Protección Vida capital constante</h4>
+          <div class="insurance-receipts">
+            <div class="insurance-receipt-item" *ngIf="formattedInsuranceFirstReceipt && formattedInsuranceFirstReceipt !== formattedInsuranceCost && formattedInsuranceFirstReceipt !== '0,00'">
+              <span class="insurance-receipt-label">Primer recibo:</span>
+              <span class="insurance-receipt-value">{{ formattedInsuranceFirstReceipt }} €</span>
+            </div>
+            <div class="insurance-receipt-item">
+              <span class="insurance-receipt-label">Prima mensual:</span>
+              <span class="insurance-receipt-value">{{ formattedInsuranceCost }} €/mes</span>
+            </div>
           </div>
           <p class="confirmacion-submessage-inline">
-            La contratación de su seguro está solicitada; en breve se lo cargaremos en su cuenta.
+            La contratación de tu seguro está solicitada; en un máximo de 2 días laborables lo cargaremos en tu cuenta.
           </p>
         </div>
       </div>

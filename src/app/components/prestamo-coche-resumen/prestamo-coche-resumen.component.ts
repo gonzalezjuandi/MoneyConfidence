@@ -97,14 +97,13 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
     monthlyPayment: 0,
     tin: 4.00,
     tae: 4.84,
-    openingCommission: 220.00,
+    openingCommission: 0,
     totalInterest: 0,
     totalToRepay: 0,
     firstPaymentDate: '',
     hasInsurance: false,
     accountNumber: 'Cuenta Online Sabadell •••2930',
-    accountHolder: 'María García Palao',
-    loanPurpose: 'Vehículo'
+    accountHolder: 'María García Palao'
   };
 
   /** Datos visibles: siempre los de la simulación (loanData) si existen. */
@@ -292,7 +291,7 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
     console.log('Compartiendo documentación...');
     if (navigator.share) {
       navigator.share({
-        title: 'Documentación Precontractual - Seguro Protección Vida',
+        title: 'Documentación Precontractual - Seguro Protección Vida capital constante',
         text: 'Documentación precontractual del seguro de protección de vida',
         url: window.location.href
       }).catch(err => console.log('Error al compartir:', err));

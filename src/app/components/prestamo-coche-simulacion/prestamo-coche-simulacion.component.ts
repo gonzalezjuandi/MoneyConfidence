@@ -42,7 +42,6 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   showMedicalModal = false;
 
   // Modal de confirmación: usuario confirma que ha leído y marca "padezco condición médica"
-  showMedicalConfirmModal = false;
 
   // Si el usuario confirma que padece condición médica, no se muestra ni el bloque de seguro ni su titular/bodycopy
   hasDeclaredMedicalCondition = false;
@@ -229,15 +228,9 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
     // Actualizar la cuota mensual inmediatamente
     this.updateMonthlyPayment();
     
-    // Mostrar toast cuando se activa el seguro
-    if (this.hasInsurance) {
-      this.showToastNotification(
-        'Tus datos serán enviados a la aseguradora si avanza con el proceso de contratación del seguro.',
-        'info'
-      );
-    } else {
-      this.closeToast();
-    }
+    // Ya no mostramos el toast aquí: la información legal sobre el envío de datos
+    // a la aseguradora está incluida en los bloques de consentimiento y texto legal.
+    this.closeToast();
   }
 
   closeToast(): void {
@@ -299,10 +292,7 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
       this.monthlyPayment = basePayment;
     }
     
-    // Agregar el seguro si está activo
-    const insurance = this.hasInsurance ? this.insuranceCost : 0;
-    this.monthlyPayment = this.monthlyPayment + insurance;
-    
+    // La cuota mostrada es solo la del préstamo; el seguro se cobra por separado (productos independientes)
     this.monthlyPayment = Math.round(this.monthlyPayment * 100) / 100;
     this.cdr.detectChanges();
   }
@@ -360,14 +350,13 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
         monthlyPayment: this.monthlyPayment,
         tin: this.tin,
         tae: this.tae,
-        openingCommission: 220.00,
+        openingCommission: 0,
         totalInterest: this.calculateTotalInterest(),
         totalToRepay: this.calculateTotalToRepay(),
         firstPaymentDate: this.getFirstPaymentDate(),
         hasInsurance: false,
         accountNumber: 'Cuenta Online Sabadell •••2930',
-        accountHolder: 'María García Palao',
-        loanPurpose: 'Vehículo'
+        accountHolder: 'María García Palao'
       };
       this.next.emit(resumenData);
     }
@@ -384,7 +373,7 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
       monthlyPayment: this.monthlyPayment,
       tin: this.tin,
       tae: this.tae,
-      openingCommission: 220.00, // Valor por defecto
+      openingCommission: 0, // Valor por defecto
       totalInterest: this.calculateTotalInterest(),
       totalToRepay: this.calculateTotalToRepay(),
       firstPaymentDate: this.getFirstPaymentDate(),
@@ -393,8 +382,7 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
       insuranceFirstReceipt: this.hasInsurance ? this.insuranceFirstReceipt : undefined,
       insuranceMonthlyReceipt: this.hasInsurance ? this.insuranceCost : undefined,
       accountNumber: 'Cuenta Online Sabadell •••2930',
-      accountHolder: 'María García Palao',
-      loanPurpose: 'Vehículo'
+      accountHolder: 'María García Palao'
     };
     
     // Emitir evento con los datos
@@ -408,7 +396,7 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
 
   private calculateTotalToRepay(): number {
     const totalInterest = this.calculateTotalInterest();
-    const openingCommission = 220.00;
+    const openingCommission = 0;
     return this.amount + totalInterest + openingCommission;
   }
 
@@ -421,34 +409,16 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   }
 
   onHasMedicalCondition(): void {
-    // Abrir modal de confirmación (cumplimiento): asegurar que ha leído y marcado correctamente
-    this.showMedicalConfirmModal = true;
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => lucide.createIcons(), 100);
-    }
-  }
-
-  onConfirmMedicalConditionDeclared(): void {
-    // Usuario confirma en el segundo modal: volver al simulador y ocultar todo el bloque de seguro
+    // Usuario indica que tiene o ha tenido alguna condición: volver al simulador sin el módulo de seguro
     this.hasDeclaredMedicalCondition = true;
     this.hasInsurance = false;
-    this.showMedicalConfirmModal = false;
     this.closeMedicalModal();
     this.updateMonthlyPayment();
     this.cdr.detectChanges();
   }
 
-  onCancelMedicalConditionDeclared(): void {
-    // Volver al primer modal médico sin confirmar
-    this.showMedicalConfirmModal = false;
-    if (typeof lucide !== 'undefined') {
-      setTimeout(() => lucide.createIcons(), 100);
-    }
-  }
-
   closeMedicalModal(): void {
     this.showMedicalModal = false;
-    this.showMedicalConfirmModal = false;
     document.body.style.overflow = '';
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {

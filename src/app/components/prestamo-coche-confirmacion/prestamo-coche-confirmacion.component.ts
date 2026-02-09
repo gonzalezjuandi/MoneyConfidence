@@ -26,7 +26,7 @@ export class PrestamoCocheConfirmacionComponent implements OnInit, AfterViewInit
     };
     const data = this.loanData || defaultData;
     if (!data.totalToRepay && data.monthlyPayment && data.termMonths) {
-      data.totalToRepay = data.monthlyPayment * data.termMonths + (data.openingCommission ?? 220);
+      data.totalToRepay = data.monthlyPayment * data.termMonths + (data.openingCommission ?? 0);
     }
     return data;
   }
@@ -96,5 +96,22 @@ export class PrestamoCocheConfirmacionComponent implements OnInit, AfterViewInit
     const cost = this.data.insuranceMonthlyReceipt ?? this.data.insuranceMonthlyCost ?? this.data.insuranceCost;
     if (cost == null) return '0,00';
     return Number(cost).toFixed(2).replace('.', ',');
+  }
+
+  get formattedInsuranceFirstReceipt(): string {
+    if (!this.data.hasInsurance) return '0,00';
+    const firstReceipt = this.data.insuranceFirstReceipt;
+    if (firstReceipt == null) return '0,00';
+    return Number(firstReceipt).toFixed(2).replace('.', ',');
+  }
+
+  get formattedInsuranceDisplay(): string {
+    if (!this.data.hasInsurance) return '';
+    const monthly = this.formattedInsuranceCost;
+    const firstReceipt = this.formattedInsuranceFirstReceipt;
+    if (firstReceipt && firstReceipt !== monthly && firstReceipt !== '0,00') {
+      return `Prima: ${monthly} €/mes (Primer recibo: ${firstReceipt} €)`;
+    }
+    return `Prima: ${monthly} €/mes`;
   }
 }

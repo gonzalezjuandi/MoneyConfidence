@@ -786,7 +786,7 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
     if (hasInsurance) {
       // Con seguro: spinner de documentación del seguro → documentos seguro → firma seguro → loading final → confirmación
       this.prestamoCocheView = 'seguro-loading';
-      const loadingTime = 4000 + Math.random() * 2000;
+      const loadingTime = 5000 + Math.random() * 1000;
       setTimeout(() => {
         this.prestamoCocheView = 'seguro-document-manager';
         if (typeof lucide !== 'undefined') {

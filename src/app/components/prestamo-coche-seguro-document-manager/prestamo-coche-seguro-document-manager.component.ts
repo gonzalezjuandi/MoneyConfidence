@@ -178,7 +178,7 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
       <div class="document-section">
         <h3 class="section-title">PORTADA</h3>
         <p class="section-text">
-          <strong>Seguro Protección Vida Capital Constante</strong><br>
+          <strong>Seguro Protección Vida capital constante</strong><br>
           Zurich Vida, Compañía de Seguros y Reaseguros, S.A.
         </p>
       </div>
@@ -264,7 +264,7 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
         </div>
 
         <div class="descanso-card">
-          <h3 class="descanso-card-title">Seguro Protección Vida</h3>
+          <h3 class="descanso-card-title">Seguro Protección Vida capital constante</h3>
           <div class="descanso-data">
             <div class="descanso-item">
               <span class="descanso-label">Prima mensual</span>
@@ -295,6 +295,7 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
           </p>
         </div>
       </div>
+
     `;
   }
 
@@ -375,7 +376,7 @@ export class PrestamoCocheSeguroDocumentManagerComponent implements OnInit, Afte
         <p class="section-text">
           <strong>Solicitante:</strong> ${holderName}<br>
           <strong>DNI/NIE:</strong> 12345678A<br>
-          <strong>Producto:</strong> Seguro Protección Vida Capital Constante<br>
+          <strong>Producto:</strong> Seguro Protección Vida capital constante<br>
           <strong>Compañía:</strong> Zurich Vida, Compañía de Seguros y Reaseguros, S.A.
         </p>
       </div>

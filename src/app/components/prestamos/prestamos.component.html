@@ -43,8 +43,8 @@
   <!-- Préstamo Coche: Loading Seguro -->
   <app-prestamo-coche-loading
     *ngIf="prestamoCocheView === 'seguro-loading'"
-    [message]="'Ya has completado la firma del préstamo'"
-    [subtitle]="'Solo te falta la del seguro. No te vayas.'">
+    [message]="'Ya tienes el préstamo abonado. Solo falta un paso: la firma del seguro'"
+    [subtitle]="'No te vayas todavía.'">
   </app-prestamo-coche-loading>
 
   <!-- Préstamo Coche: Gestor Documental Seguro -->
@@ -67,7 +67,8 @@
   <!-- Préstamo Coche: Loading Final -->
   <app-prestamo-coche-loading
     *ngIf="prestamoCocheView === 'final-loading'"
-    [message]="'Ingresando el dinero en tu cuenta. ¡Disfruta de tu préstamo!'">
+    [message]="'Ya tienes contratado el seguro de tu préstamo'"
+    [subtitle]="'En unos días lo cargaremos en tu cuenta.'">
   </app-prestamo-coche-loading>
 
   <!-- Préstamo Coche: Confirmación -->
@@ -200,7 +201,11 @@
             <p class="loan-card-description">Consúltanos cualquier duda que tengas por chat o llamada</p>
             <div class="loan-card-actions">
               <button type="button" class="loan-card-btn loan-card-btn-primary loan-card-btn-with-icon">
-                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" style="width: 1.5rem; height: 1.5rem;">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.97394 16.3997L4.71817 19.2968L8.10519 18.4877L8.64737 18.7931C9.78922 19.4362 11.1073 19.8036 12.516 19.8036C16.8775 19.8036 20.4131 16.2679 20.4131 11.9064C20.4131 7.54492 16.8775 4.00924 12.516 4.00924C8.15447 4.00924 4.61879 7.54492 4.61879 11.9064C4.61879 13.2914 4.97397 14.5887 5.597 15.7171L5.97394 16.3997ZM2 21.5776L4.20784 16.4841C3.45844 15.1269 3.03193 13.5665 3.03193 11.9064C3.03193 6.66853 7.27808 2.42238 12.516 2.42238C17.7539 2.42238 22 6.66853 22 11.9064C22 17.1443 17.7539 21.3904 12.516 21.3904C10.8275 21.3904 9.24202 20.9492 7.86866 20.1757L2 21.5776Z" fill="currentColor"/>
+                  <path d="M15.3142 7.33122C16.1468 8.67695 15.6607 10.261 14.254 11.4516L13.8804 11.776C13.2113 12.3757 12.9958 12.6992 12.9666 13.0614L12.963 13.1529V13.8303H11.6081V13.1529C11.6081 12.1741 12.0641 11.5302 13.3787 10.4175C14.3226 9.61859 14.5923 8.73953 14.162 8.04401C13.7796 7.42575 12.4297 7.26492 11.1814 7.72963L10.9488 7.82413L10.3291 8.0977L9.78194 6.85822L10.4017 6.58466C12.2545 5.76678 14.4752 5.97501 15.3142 7.33122Z" fill="currentColor"/>
+                  <path d="M11.2483 16.8772C11.2483 16.316 11.7032 15.861 12.2644 15.861C12.8256 15.861 13.2805 16.316 13.2805 16.8772C13.2805 17.4384 12.8256 17.8933 12.2644 17.8933C11.7032 17.8933 11.2483 17.4384 11.2483 16.8772Z" fill="currentColor"/>
+                </svg>
                 Ir al chat
               </button>
               <button type="button" class="loan-card-btn loan-card-btn-secondary loan-card-btn-with-icon">

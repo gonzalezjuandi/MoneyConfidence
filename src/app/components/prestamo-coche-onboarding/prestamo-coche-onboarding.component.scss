@@ -232,10 +232,10 @@
   display: inline-block;
 }
 
-/* Footer sticky completamente transparente: se ve todo el contenido debajo */
+/* Footer sticky con fondo blanco */
 .onboarding-footer {
   padding: 1.5rem 1.25rem;
-  background: transparent;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -245,8 +245,8 @@
   right: 0;
   width: 100%;
   z-index: 100;
-  box-shadow: none;
-  border-top: none;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+  border-top: 1px solid #f3f4f6;
 }
 
 .onboarding-cta {
