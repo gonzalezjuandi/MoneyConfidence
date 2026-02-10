@@ -283,7 +283,7 @@
   }
 }
 
-/* Footer sticky con fondo blanco */
+/* Footer sticky sin fondo (transparente) */
 .resumen-footer {
   position: fixed;
   bottom: 0;
@@ -291,9 +291,7 @@
   right: 0;
   width: 100%;
   padding: 1.5rem 1.25rem;
-  background: #ffffff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
-  border-top: 1px solid #f3f4f6;
+  background: transparent;
   z-index: 100;
   margin-top: auto;
 }

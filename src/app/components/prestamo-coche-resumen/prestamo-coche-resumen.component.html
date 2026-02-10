@@ -193,7 +193,7 @@
       </button>
     </footer>
 
-    <!-- Toast de éxito -->
+    <!-- Toast de éxito: seguro añadido -->
     <div class="toast-container" *ngIf="showSuccessToast">
       <div class="toast-notification toast-success">
         <div class="toast-icon">
@@ -201,6 +201,24 @@
         </div>
         <div class="toast-message">
           Has añadido el Seguro Protección Vida capital constante a tu solicitud
+        </div>
+        <button type="button"
+                class="toast-close"
+                (click)="closeToast()"
+                aria-label="Cerrar notificación">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast informativo: no es posible añadir el seguro por condición médica -->
+    <div class="toast-container" *ngIf="showMedicalToast">
+      <div class="toast-notification">
+        <div class="toast-icon">
+          <i data-lucide="alert-circle" class="w-5 h-5"></i>
+        </div>
+        <div class="toast-message">
+          El Seguro Protección Vida capital constante no está disponible para este préstamo por criterios de la aseguradora.
         </div>
         <button type="button"
                 class="toast-close"

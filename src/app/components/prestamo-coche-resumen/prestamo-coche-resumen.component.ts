@@ -15,6 +15,8 @@ export interface PrestamoCocheResumenData {
   totalToRepay: number;
   firstPaymentDate: string;
   hasInsurance: boolean;
+  /** Indica si el cliente ha declarado alguna condición médica (no se puede añadir el seguro). */
+  medicalConditionDeclared?: boolean;
   insuranceAnnualPremium?: number;
   insuranceFirstReceipt?: number;
   insuranceMonthlyReceipt?: number;
@@ -39,6 +41,8 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
   // Toast de éxito
   showSuccessToast = false;
   private toastTimeout: any;
+  // Toast informativo cuando no se puede añadir el seguro por condición médica
+  showMedicalToast = false;
 
   // Dropdown de cuentas
   showAccountDropdown = false;
@@ -102,6 +106,7 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
     totalToRepay: 0,
     firstPaymentDate: '',
     hasInsurance: false,
+    medicalConditionDeclared: false,
     accountNumber: 'Cuenta Online Sabadell •••2930',
     accountHolder: 'María García Palao'
   };
@@ -114,6 +119,8 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
   ngOnInit(): void {
     if (this.data.hasInsurance) {
       setTimeout(() => this.showSuccessToastNotification(), 500);
+    } else if (this.loanData?.medicalConditionDeclared) {
+      setTimeout(() => this.showMedicalRestrictionToast(), 500);
     }
   }
 
@@ -321,6 +328,7 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
 
   showSuccessToastNotification(): void {
     this.showSuccessToast = true;
+    this.showMedicalToast = false;
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {
         lucide.createIcons();
@@ -334,9 +342,23 @@ export class PrestamoCocheResumenComponent implements OnInit, AfterViewInit, OnD
 
   closeToast(): void {
     this.showSuccessToast = false;
+    this.showMedicalToast = false;
     if (this.toastTimeout) {
       clearTimeout(this.toastTimeout);
     }
+  }
+
+  private showMedicalRestrictionToast(): void {
+    this.showMedicalToast = true;
+    this.showSuccessToast = false;
+    if (typeof lucide !== 'undefined') {
+      setTimeout(() => {
+        lucide.createIcons();
+      }, 0);
+    }
+    this.toastTimeout = setTimeout(() => {
+      this.closeToast();
+    }, 5000);
   }
 
   get formattedAmount(): string {

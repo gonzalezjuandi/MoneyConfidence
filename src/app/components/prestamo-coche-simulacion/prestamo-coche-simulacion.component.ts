@@ -355,6 +355,7 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
         totalToRepay: this.calculateTotalToRepay(),
         firstPaymentDate: this.getFirstPaymentDate(),
         hasInsurance: false,
+        medicalConditionDeclared: false,
         accountNumber: 'Cuenta Online Sabadell •••2930',
         accountHolder: 'María García Palao'
       };
@@ -378,6 +379,7 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
       totalToRepay: this.calculateTotalToRepay(),
       firstPaymentDate: this.getFirstPaymentDate(),
       hasInsurance: this.hasInsurance,
+      medicalConditionDeclared: false,
       insuranceAnnualPremium: this.hasInsurance ? (this.insuranceCost * 12) : undefined,
       insuranceFirstReceipt: this.hasInsurance ? this.insuranceFirstReceipt : undefined,
       insuranceMonthlyReceipt: this.hasInsurance ? this.insuranceCost : undefined,
@@ -409,12 +411,31 @@ export class PrestamoCocheSimulacionComponent implements OnInit, AfterViewInit {
   }
 
   onHasMedicalCondition(): void {
-    // Usuario indica que tiene o ha tenido alguna condición: volver al simulador sin el módulo de seguro
+    // Usuario indica que tiene o ha tenido alguna condición:
+    // marcar que ha declarado condición médica, desactivar seguro y pasar al resumen sin bloque de seguro
     this.hasDeclaredMedicalCondition = true;
     this.hasInsurance = false;
     this.closeMedicalModal();
     this.updateMonthlyPayment();
     this.cdr.detectChanges();
+
+    const resumenData: PrestamoCocheResumenData = {
+      amount: this.amount,
+      termMonths: this.termMonths,
+      monthlyPayment: this.monthlyPayment,
+      tin: this.tin,
+      tae: this.tae,
+      openingCommission: 0,
+      totalInterest: this.calculateTotalInterest(),
+      totalToRepay: this.calculateTotalToRepay(),
+      firstPaymentDate: this.getFirstPaymentDate(),
+      hasInsurance: false,
+      medicalConditionDeclared: true,
+      accountNumber: 'Cuenta Online Sabadell •••2930',
+      accountHolder: 'María García Palao'
+    };
+
+    this.next.emit(resumenData);
   }
 
   closeMedicalModal(): void {
