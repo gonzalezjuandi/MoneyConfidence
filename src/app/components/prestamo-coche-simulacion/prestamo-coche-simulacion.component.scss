@@ -324,7 +324,12 @@
   align-items: flex-start;
   gap: 0.75rem;
   cursor: pointer;
-  margin-bottom: 1.25rem;
+  margin: 0;
+  
+  .insurance-module-container & {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 }
 
 .insurance-consent-checkbox {
@@ -430,10 +435,52 @@
   line-height: 1.5;
 }
 
+/* Contenedor del módulo de seguro (card sutil) */
+.insurance-module-container {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.insurance-module-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.insurance-module-description {
+  font-size: 0.875rem;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.5;
+}
+
+.insurance-module-link {
+  font-size: 0.875rem;
+  color: #006DFF;
+  text-decoration: underline;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: #0058E6;
+    text-decoration: underline;
+  }
+}
+
 .insurance-option-wrapper {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 0.75rem;
   align-items: flex-start;
 }
 
@@ -492,9 +539,6 @@
 
 .insurance-label-wrapper {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   cursor: pointer;
   margin: 0;
   padding: 0;
@@ -506,12 +550,17 @@
 }
 
 .insurance-checkbox-label {
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 400;
   color: #0f172a;
   line-height: 1.5;
   margin: 0;
   padding: 0;
+  
+  strong {
+    font-weight: 600;
+    color: #0f172a;
+  }
 }
 
 .insurance-content {
@@ -594,11 +643,19 @@
 
 .drawer-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid #e2e8f0;
   flex-shrink: 0;
+  position: relative;
+}
+
+.drawer-subtitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 0.25rem 0;
 }
 
 .drawer-title {
@@ -606,9 +663,13 @@
   font-weight: 700;
   color: #0f172a;
   margin: 0;
+  padding-right: 2.5rem;
 }
 
 .drawer-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
   width: 2rem;
   height: 2rem;
   border-radius: 9999px;

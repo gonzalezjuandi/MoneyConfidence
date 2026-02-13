@@ -24,163 +24,194 @@
     <main class="resumen-main">
       <h2 class="resumen-title">Resumen de tu solicitud</h2>
 
-      <!-- Loan Details Section -->
-      <div class="resumen-section">
-        <div class="resumen-item">
-          <span class="resumen-label">Importe solicitado</span>
-          <span class="resumen-value">{{ formattedAmount }} €</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Plazos</span>
-          <span class="resumen-value">{{ termYears }} años ({{ data.termMonths }} meses)</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Cuota</span>
-          <span class="resumen-value">{{ formattedMonthlyPayment }} €/mes</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Intereses</span>
-          <span class="resumen-value">{{ formattedTotalInterest }} €</span>
-        </div>
-        <div class="resumen-item resumen-item-nested">
-          <span class="resumen-label-nested">TIN</span>
-          <span class="resumen-value-nested">{{ data.tin.toFixed(2) }} % anual</span>
-        </div>
-        <div class="resumen-item resumen-item-nested">
-          <span class="resumen-label-nested">TAE</span>
-          <span class="resumen-value-nested">{{ data.tae.toFixed(2) }} %</span>
-        </div>
-        <div class="resumen-item resumen-item-commission">
-          <span class="resumen-label">Comisión de apertura</span>
-          <div class="resumen-commission-right">
-            <span class="resumen-value resumen-value-commission">{{ formattedOpeningCommission }} €</span>
-            <span class="resumen-badge resumen-badge-zero">Sin comisión</span>
+      <!-- Texto introductorio (solo si hay seguro) -->
+      <p class="resumen-intro-text" *ngIf="data.hasInsurance">
+        Tu solicitud incluye dos productos, ten en cuenta que la cuota del préstamo y la prima del seguro llegarán por separado.
+      </p>
+
+      <!-- Módulo Préstamo Preconcedido -->
+      <div class="resumen-module resumen-module-loan">
+        <h3 class="resumen-module-title">Préstamo Preconcedido</h3>
+        <div class="resumen-module-content">
+          <div class="resumen-item">
+            <span class="resumen-label">Importe solicitado</span>
+            <span class="resumen-value">{{ formattedAmount }} €</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Cuota</span>
+            <span class="resumen-value">{{ formattedMonthlyPayment }} €/mes</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Intereses</span>
+            <span class="resumen-value">{{ formattedTotalInterest }} €</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Plazos</span>
+            <span class="resumen-value">{{ termYears }} años ({{ data.termMonths }} cuotas mensuales)</span>
+          </div>
+          <div class="resumen-item resumen-item-nested">
+            <span class="resumen-label-nested">TIN</span>
+            <span class="resumen-value-nested">{{ data.tin.toFixed(2) }} % anual</span>
+          </div>
+          <div class="resumen-item resumen-item-nested">
+            <span class="resumen-label-nested">TAE</span>
+            <span class="resumen-value-nested">TAE: {{ data.tae.toFixed(2) }} %</span>
+          </div>
+          <div class="resumen-item resumen-item-commission">
+            <span class="resumen-label">Comisión de apertura</span>
+            <div class="resumen-commission-right">
+              <span class="resumen-value resumen-value-commission">{{ formattedOpeningCommission }} €</span>
+              <span class="resumen-badge resumen-badge-zero">Sin comisión</span>
+            </div>
+          </div>
+          <div class="resumen-item resumen-item-total">
+            <span class="resumen-label">Total a devolver</span>
+            <span class="resumen-value resumen-value-total">{{ formattedTotalToRepay }} €</span>
+          </div>
+          <a href="#" class="resumen-link" (click)="onModifyRequest(); $event.preventDefault()">Modificar solicitud</a>
+          <div class="resumen-item">
+            <span class="resumen-label">Pago de la primera cuota</span>
+            <span class="resumen-value">{{ data.firstPaymentDate }}</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Cuenta de depósito del préstamo</span>
+            <span class="resumen-value">{{ data.accountNumber || 'Cuenta Online Sabadell •••2930' }}</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Titular de la cuenta</span>
+            <span class="resumen-value">{{ data.accountHolder || 'María García Palao' }}</span>
           </div>
         </div>
-        <div class="resumen-item resumen-item-total">
-          <span class="resumen-label">Total a devolver</span>
-          <span class="resumen-value resumen-value-total">{{ formattedTotalToRepay }} €</span>
-        </div>
-        <a href="#" class="resumen-link" (click)="onModifyRequest(); $event.preventDefault()">Modificar solicitud</a>
       </div>
 
-      <!-- First Payment Date Section -->
-      <div class="resumen-section">
-        <div class="resumen-item">
-          <span class="resumen-label">Pago de la primera cuota</span>
-          <span class="resumen-value">{{ data.firstPaymentDate }}</span>
+      <!-- Sección 1: Elige el motivo del préstamo -->
+      <div class="resumen-step-section">
+        <div class="resumen-step-header">
+          <span class="resumen-step-number">1</span>
+          <h3 class="resumen-step-title">Elige el motivo del préstamo</h3>
         </div>
-        <p class="resumen-info-text">
-          La cancelación anticipada será del 1,00 % del importe reembolsado, si falta más de un año para el vencimiento del contrato, o del 0,50 % del importe reembolsado en caso contrario.
-        </p>
-      </div>
-
-      <!-- Account Section -->
-      <div class="resumen-section">
-        <div class="resumen-item">
-          <span class="resumen-label">Cuenta de depósito del préstamo</span>
-          <span class="resumen-value">{{ data.accountNumber || 'Cuenta Online Sabadell •••2930' }}</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Titular de la cuenta</span>
-          <span class="resumen-value">{{ data.accountHolder || 'María García Palao' }}</span>
-        </div>
-      </div>
-
-      <!-- Loan Purpose Section (siempre debajo de Cuenta de depósito) -->
-      <div class="resumen-section">
-        <div class="resumen-item resumen-item-dropdown" (click)="toggleLoanPurposeDropdown()">
-          <span class="resumen-label">Motivo del préstamo</span>
-          <div class="resumen-value-wrapper">
-            <span class="resumen-value">{{ data.loanPurpose || 'No seleccionado' }}</span>
-            <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showLoanPurposeDropdown"></i>
-          </div>
-          <div class="dropdown-menu" *ngIf="showLoanPurposeDropdown" (click)="$event.stopPropagation()">
-            <div class="dropdown-item" 
-                 *ngFor="let purpose of loanPurposeOptions"
-                 (click)="selectLoanPurpose(purpose)"
-                 [class.selected]="purpose === data.loanPurpose">
-              {{ purpose }}
+        <div class="resumen-step-content">
+          <div class="resumen-item resumen-item-dropdown" (click)="toggleLoanPurposeDropdown()">
+            <span class="resumen-label">Motivo del préstamo</span>
+            <div class="resumen-value-wrapper">
+              <span class="resumen-value">{{ data.loanPurpose || 'Motivo del préstamo' }}</span>
+              <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showLoanPurposeDropdown"></i>
+            </div>
+            <div class="dropdown-menu" *ngIf="showLoanPurposeDropdown" (click)="$event.stopPropagation()">
+              <div class="dropdown-item" 
+                   *ngFor="let purpose of loanPurposeOptions"
+                   (click)="selectLoanPurpose(purpose)"
+                   [class.selected]="purpose === data.loanPurpose">
+                {{ purpose }}
+              </div>
             </div>
           </div>
         </div>
+        <div class="resumen-info-block">
+          <i data-lucide="info" class="resumen-info-icon" aria-hidden="true"></i>
+          <p class="resumen-info-text">
+            La cancelación anticipada será del 1,00 % del importe reembolsado, si falta más de un año para el vencimiento del contrato, o del 0,50 % del importe reembolsado en caso contrario.
+          </p>
+        </div>
       </div>
 
-      <!-- Insurance Section -->
-      <div class="resumen-section" *ngIf="data.hasInsurance">
-        <h3 class="resumen-section-title">Seguro Protección Vida capital constante</h3>
-        <div class="resumen-item">
-          <span class="resumen-label">Prima anual seguro Protección Vida capital constante</span>
-          <span class="resumen-value">{{ formattedInsuranceAnnualPremium }} €</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Importe primer recibo</span>
-          <span class="resumen-value">{{ formattedInsuranceFirstReceipt }} €</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Importe resto de recibos</span>
-          <span class="resumen-value">{{ formattedInsuranceMonthlyReceipt }} €</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Capital asegurado</span>
-          <span class="resumen-value">100% del importe del préstamo</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Forma de pago</span>
-          <span class="resumen-value">Mensual</span>
-        </div>
-        <div class="resumen-item resumen-item-dropdown" (click)="toggleAccountDropdown()">
-          <span class="resumen-label">Cuenta de cobro del seguro</span>
-          <div class="resumen-value-wrapper">
-            <span class="resumen-value">{{ selectedInsuranceAccount }}</span>
-            <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showAccountDropdown"></i>
+      <!-- Módulo Resumen del Seguro (solo si hay seguro) -->
+      <div class="resumen-module resumen-module-insurance" *ngIf="data.hasInsurance">
+        <h3 class="resumen-module-title">Resumen del Seguro Protección Vida Capital Constante.</h3>
+        <div class="resumen-module-content">
+          <div class="resumen-item">
+            <span class="resumen-label">Prima anual seguro</span>
+            <span class="resumen-value">{{ formattedInsuranceAnnualPremium }} €</span>
           </div>
-          <div class="dropdown-menu" *ngIf="showAccountDropdown" (click)="$event.stopPropagation()">
-            <div class="dropdown-item" 
-                 *ngFor="let account of availableAccounts"
-                 (click)="selectAccount(account)"
-                 [class.selected]="account === selectedInsuranceAccount">
-              {{ account }}
+          <div class="resumen-item">
+            <span class="resumen-label">Importe primer recibo</span>
+            <span class="resumen-value">{{ formattedInsuranceFirstReceipt }} €</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Importe resto de recibos</span>
+            <span class="resumen-value">{{ formattedInsuranceMonthlyReceipt }} €</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Forma de pago</span>
+            <span class="resumen-value">Mensual</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Capital asegurado</span>
+            <span class="resumen-value">100% del importe del préstamo</span>
+          </div>
+          <div class="resumen-item resumen-item-stacked">
+            <span class="resumen-label">Pago de la primera cuota del seguro</span>
+            <span class="resumen-value">Plazo máximo de 2 días laborables tras la formalización del préstamo</span>
+          </div>
+          <a href="#" class="resumen-link" (click)="openDocumentViewer(); $event.preventDefault()">Ver documento precontractual del seguro</a>
+        </div>
+      </div>
+
+      <!-- Sección 2: Revisa los detalles de tu seguro (solo si hay seguro) -->
+      <div class="resumen-step-section" *ngIf="data.hasInsurance">
+        <div class="resumen-step-header">
+          <span class="resumen-step-number">2</span>
+          <h3 class="resumen-step-title">Revisa los detalles de tu seguro</h3>
+        </div>
+        <div class="resumen-step-content">
+          <div class="resumen-item resumen-item-dropdown" (click)="toggleAccountDropdown()">
+            <span class="resumen-label">Cuenta de cobro del seguro</span>
+            <div class="resumen-value-wrapper">
+              <span class="resumen-value">{{ selectedInsuranceAccount }}</span>
+              <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showAccountDropdown"></i>
+            </div>
+            <div class="dropdown-menu" *ngIf="showAccountDropdown" (click)="$event.stopPropagation()">
+              <div class="dropdown-item" 
+                   *ngFor="let account of availableAccounts"
+                   (click)="selectAccount(account)"
+                   [class.selected]="account === selectedInsuranceAccount">
+                {{ account }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="resumen-item resumen-item-stacked">
-          <span class="resumen-label">Pago del primer recibo</span>
-          <span class="resumen-value">Tras formalización del préstamo (en un máximo de 2 días laborables)</span>
-        </div>
-        <div class="resumen-item">
-          <span class="resumen-label">Persona asegurada</span>
-          <span class="resumen-value">{{ data.accountHolder || 'María García Palao' }}</span>
-        </div>
-        <div class="resumen-item resumen-item-dropdown" (click)="toggleBeneficiaryDropdown()">
-          <span class="resumen-label">Beneficiario del seguro</span>
-          <div class="resumen-value-wrapper">
-            <span class="resumen-value">{{ selectedBeneficiary }}</span>
-            <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showBeneficiaryDropdown"></i>
-          </div>
-          <div class="dropdown-menu" *ngIf="showBeneficiaryDropdown" (click)="$event.stopPropagation()">
-            <div class="dropdown-item" 
-                 *ngFor="let beneficiary of availableBeneficiaries"
-                 (click)="selectBeneficiary(beneficiary)"
-                 [class.selected]="beneficiary === selectedBeneficiary">
-              {{ beneficiary }}
+          <div class="resumen-item resumen-item-editable">
+            <span class="resumen-label">Persona asegurada</span>
+            <div class="resumen-value-wrapper">
+              <span class="resumen-value">{{ data.accountHolder || 'María García Palao' }}</span>
+              <button type="button" class="resumen-remove-btn" aria-label="Eliminar">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
             </div>
           </div>
+          <div class="resumen-item resumen-item-dropdown" (click)="toggleBeneficiaryDropdown()">
+            <span class="resumen-label">Beneficiario del seguro</span>
+            <div class="resumen-value-wrapper">
+              <span class="resumen-value">{{ selectedBeneficiary }}</span>
+              <i data-lucide="chevron-down" class="w-4 h-4" [class.rotated]="showBeneficiaryDropdown"></i>
+            </div>
+            <div class="dropdown-menu" *ngIf="showBeneficiaryDropdown" (click)="$event.stopPropagation()">
+              <div class="dropdown-item" 
+                   *ngFor="let beneficiary of availableBeneficiaries"
+                   (click)="selectBeneficiary(beneficiary)"
+                   [class.selected]="beneficiary === selectedBeneficiary">
+                {{ beneficiary }}
+              </div>
+            </div>
+          </div>
+          <p class="resumen-info-text">
+            Puedes modificarlo después de la contratación.
+          </p>
         </div>
-        <p class="resumen-info-text">
-          Puedes modificarlo después de la contratación.
-        </p>
-        <a href="#" class="resumen-link" (click)="openDocumentViewer(); $event.preventDefault()">Ver documentación precontractual del seguro</a>
       </div>
 
       <!-- Legal Information -->
       <div class="resumen-legal">
-        <p class="resumen-legal-text">
-          Los resultados de esta simulación son de carácter informativo y válidos exclusivamente para su solicitud online.
-        </p>
-        <p class="resumen-legal-text">
-          Banco Sabadell se reserva el derecho de no hacer efectivo este préstamo si durante el periodo de tramitación de la solicitud se conoce alguna circunstancia del titular o de los titulares que pueda afectar a la capacidad de pago o a la solvencia del mismo.
-        </p>
+        <div class="resumen-legal-row">
+          <i data-lucide="info" class="resumen-legal-icon" aria-hidden="true"></i>
+          <div class="resumen-legal-content">
+            <p class="resumen-legal-text">
+              Los resultados de esta simulación son de carácter informativo y válidos exclusivamente para su solicitud online.
+            </p>
+            <p class="resumen-legal-text">
+              Banco Sabadell se reserva el derecho de no hacer efectivo este préstamo si durante el periodo de tramitación de la solicitud se conoce alguna circunstancia del titular o de los titulares que pueda afectar a la capacidad de pago o a la solvencia del mismo.
+            </p>
+          </div>
+        </div>
       </div>
     </main>
 

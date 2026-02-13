@@ -80,14 +80,16 @@
 
       <!-- Importe no múltiplo de 500: titular y body como en múltiplo de 500, luego card de consentimiento -->
       <div class="form-section" *ngIf="!hasDeclaredMedicalCondition && !amountIsMultipleOf500 && !userAcceptedDataShare">
-        <h3 class="form-section-title">Añade un seguro a tu préstamo</h3>
-        <p class="insurance-description">
-          El Seguro Protección Vida capital constante cubre al titular del préstamo y las garantías son por fallecimiento e incapacidad absoluta.
-        </p>
-        <div class="insurance-consent-container">
-          <p class="insurance-consent-instruction">
-            Lee y marca la siguiente casilla para ver el precio personalizado del seguro para tu préstamo.
+        <div class="insurance-module-container">
+          <h3 class="insurance-module-title">Añade un seguro a tu préstamo</h3>
+          <p class="insurance-module-description">
+            En caso de fallecimiento o incapacidad permanente absoluta, este seguro cubre al titular la devolución de su préstamo.
           </p>
+          <a href="#" 
+             class="insurance-module-link"
+             (click)="openInsuranceDrawer(); $event.preventDefault()">
+            Más información
+          </a>
           <label class="insurance-consent-checkbox-label">
             <input type="checkbox"
                    class="insurance-consent-checkbox"
@@ -100,7 +102,7 @@
           <i data-lucide="info" class="insurance-consent-info-icon" aria-hidden="true"></i>
           <div class="insurance-consent-info-content">
             <p class="insurance-consent-info-text">
-              Para poder facilitarte tu precio, el Banco comunicará a Banc Sabadell Vida tus datos identificativos y los relacionados con el préstamo con el fin de facilitarte el precio.
+              Para poder facilitarte tu precio personalizado, el Banco comunicará a Banc Sabadell Vida tus datos identificativos y los relacionados con el préstamo con el fin de facilitarte el precio.
             </p>
             <p class="insurance-consent-legal">
               Podrás ejercer tus derechos a través del correo electrónico DPO_BSVida&#64;BSVida.com y tienes más información de protección de datos en la página web <a href="https://www.sabadellsegurosypensiones.com" target="_blank" class="insurance-consent-link">www.sabadellsegurosypensiones.com</a>.
@@ -119,33 +121,30 @@
 
       <!-- Insurance Section: check del seguro (múltiplo de 500 o tras aceptar datos) -->
       <div class="form-section" *ngIf="!hasDeclaredMedicalCondition && (amountIsMultipleOf500 || (userAcceptedDataShare && !loadingInsuranceQuote))">
-        <h3 class="form-section-title">¿Quieres asegurar tu préstamo?</h3>
-        <p class="insurance-description">
-          El Seguro Protección Vida capital constante cubre al titular del préstamo y las garantías son por fallecimiento e incapacidad absoluta.
-        </p>
-        <div class="insurance-option-wrapper">
-          <input type="checkbox"
-                 id="insurance-checkbox"
-                 [checked]="hasInsurance"
-                 [disabled]="isInsuranceDisabled"
-                 (change)="onInsuranceToggle($event)"
-                 class="insurance-checkbox-native"
-                 [class.disabled]="isInsuranceDisabled">
-          <label for="insurance-checkbox" class="insurance-label-wrapper" [class.disabled]="isInsuranceDisabled">
-            <div class="insurance-checkbox-label">
-              Añadir Seguro Protección Vida capital constante a tu solicitud
-            </div>
-            <div class="insurance-content">
-              <div class="insurance-cost">
-                Por <strong>{{ insuranceCost.toFixed(2).replace('.', ',') }} €</strong>/mes (Primer recibo {{ insuranceFirstReceipt.toFixed(2).replace('.', ',') }} €).
-              </div>
-              <a href="#" 
-                 class="insurance-link"
-                 (click)="openInsuranceDrawer(); $event.preventDefault()">
-                Más información
-              </a>
-            </div>
-          </label>
+        <div class="insurance-module-container">
+          <h3 class="insurance-module-title">¿Quieres asegurar tu préstamo?</h3>
+          <p class="insurance-module-description">
+            En caso de fallecimiento o incapacidad permanente absoluta, este seguro cubre al titular la devolución de su préstamo.
+          </p>
+          <a href="#" 
+             class="insurance-module-link"
+             (click)="openInsuranceDrawer(); $event.preventDefault()">
+            Más información
+          </a>
+          <div class="insurance-option-wrapper">
+            <input type="checkbox"
+                   id="insurance-checkbox"
+                   [checked]="hasInsurance"
+                   [disabled]="isInsuranceDisabled"
+                   (change)="onInsuranceToggle($event)"
+                   class="insurance-checkbox-native"
+                   [class.disabled]="isInsuranceDisabled">
+            <label for="insurance-checkbox" class="insurance-label-wrapper" [class.disabled]="isInsuranceDisabled">
+              <span class="insurance-checkbox-label">
+                Añadir Seguro Protección Vida capital constante por <strong>{{ insuranceCost.toFixed(2).replace('.', ',') }} €</strong>/mes (Primer recibo {{ insuranceFirstReceipt.toFixed(2).replace('.', ',') }} €).
+              </span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -248,7 +247,8 @@
       <div class="insurance-drawer" (click)="$event.stopPropagation()">
         <!-- Header -->
         <div class="drawer-header">
-          <h2 class="drawer-title">Seguro Protección Vida capital constante</h2>
+          <h3 class="drawer-subtitle">Más información</h3>
+          <h2 class="drawer-title">Seguro Protección Vida - Capital constante</h2>
           <button type="button" 
                   class="drawer-close-btn"
                   (click)="closeInsuranceDrawer()"
@@ -260,39 +260,25 @@
         <!-- Content -->
         <div class="drawer-content">
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">¿Cómo se contrata?</h4>
+            <h4 class="drawer-info-title">¿Para qué sirve este seguro?</h4>
             <p class="drawer-info-text">
-              La contratación es 100% digital y consta de 4 pasos:
+              Este seguro cubre la devolución total o parcial del préstamo en caso de fallecimiento o invalidez permanente absoluta (IPA), con el objetivo de reducir el impacto económico en la familia, especialmente si dependen de los ingresos del asegurado.
             </p>
-            <ol class="drawer-info-list">
-              <li>Simulas del seguro.</li>
-              <li>Confirmas una declaración de salud.</li>
-              <li>Revisas la información del préstamo junto con el seguro, si decides incluirlo.</li>
-              <li>Lees y firmas toda la documentación necesaria para formalizar el contrato.</li>
-            </ol>
           </div>
 
           <div class="drawer-info-section">
             <h4 class="drawer-info-title">¿Cuáles son las garantías y coberturas?</h4>
             <ul class="drawer-info-list">
-              <li>Fallecimiento e Invalidez</li>
-              <li>Permanente Absoluta.</li>
+              <li>Fallecimiento</li>
+              <li>Invalidez Permanente Absoluta, por el motivo que sea, incluso accidente.</li>
             </ul>
           </div>
 
           <div class="drawer-info-section">
-            <h4 class="drawer-info-title">Capital asegurado:</h4>
+            <h4 class="drawer-info-title">¿Cuál es el capital asegurado?</h4>
             <p class="drawer-info-text">
-              El capital del seguro es igual al del préstamo y no cambia, salvo que solicites modificarlo en una oficina.
+              El capital asegurado es igual al importe del préstamo y no cambia, salvo que solicites modificarlo en una oficina.
             </p>
-          </div>
-
-          <div class="drawer-info-section">
-            <h4 class="drawer-info-title">¿Quién ofrece el seguro?</h4>
-            <ul class="drawer-info-list">
-              <li><strong>Entidad aseguradora:</strong> Banc Sabadell Vida Sociedad Anónima de Seguros y Reaseguros.</li>
-              <li><strong>Entidad mediadora:</strong> Banc Sabadell Mediación, Operador de Banca-Seguros Vinculado del Grupo Banco Sabadell S.A.</li>
-            </ul>
           </div>
 
           <div class="drawer-info-section">
@@ -305,8 +291,21 @@
           <div class="drawer-info-section">
             <h4 class="drawer-info-title">¿Puedo cancelarlo?</h4>
             <p class="drawer-info-text">
-              El seguro se cancela si amortizas todo el préstamo antes de tiempo, salvo que decidas seguir con él. También puedes solicitar la cancelación anual con al menos un mes de antelación a la fecha de vencimiento del seguro.
+              El seguro se renueva automáticamente de forma anual y se cancela si amortizas todo el préstamo antes de tiempo, salvo que decidas seguir con él. También puedes solicitar la cancelación anual con al menos un mes de antelación a la fecha de vencimiento del seguro.
             </p>
+          </div>
+
+          <div class="drawer-info-section">
+            <h4 class="drawer-info-title">¿Cómo se contrata?</h4>
+            <p class="drawer-info-text">
+              La contratación es 100% digital y consta de 4 pasos:
+            </p>
+            <ol class="drawer-info-list">
+              <li>Añades el seguro durante la simulación del préstamo.</li>
+              <li>Confirmas una declaración de salud.</li>
+              <li>Revisas la información del préstamo junto con el seguro, si decides incluirlo.</li>
+              <li>Lees y firmas toda la documentación necesaria para formalizar el contrato.</li>
+            </ol>
           </div>
 
         </div>
