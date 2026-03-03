@@ -1,49 +1,62 @@
-.prestamo-coche-onboarding-container {
-  width: 100%;
-  min-height: 100vh;
-  background: #ffffff;
+/* Overlay tipo bottom-sheet sobre la simulación */
+.prestamo-coche-onboarding-overlay {
+  position: fixed;
+  inset: 0;
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
 }
 
-.prestamo-coche-onboarding-wrapper {
+.prestamo-coche-onboarding-drawer {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  max-width: 480px;
+  height: 50vh;
+  background: #ffffff;
+  border-radius: 1.25rem 1.25rem 0 0;
+  box-shadow: 0 -12px 30px rgba(15, 23, 42, 0.25);
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
+  animation: onboardingDrawerSlideUp 0.25s ease-out;
+  transition: height 0.3s ease-out;
+
+  &.drawer-expanded {
+    height: 85vh;
+  }
+}
+
+.prestamo-coche-onboarding-drag-handle {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.8);
+  cursor: pointer;
+}
+
+@keyframes onboardingDrawerSlideUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Header */
 .onboarding-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.header-back-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  background: transparent;
-  color: #006DFF;
-  cursor: pointer;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: #f1f5f9;
-  }
+  justify-content: flex-end;
+  padding: 1rem 1.5rem 0.75rem;
 }
 
 .header-title {
@@ -82,73 +95,17 @@
 /* Main Content */
 .onboarding-main {
   flex: 1;
-  padding: 1.5rem 1.25rem;
+  padding: 0 1.5rem 1rem;
   overflow-y: auto;
-  padding-bottom: 10rem; /* Espacio para el footer fixed */
 }
 
-/* Loan Offer Card */
-.loan-offer-card {
-  background: #f8fafc;
-  border-radius: 1rem;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
+.onboarding-section {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 1.25rem;
 }
 
-.loan-offer-image {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(135deg, #006DFF 0%, #0058E6 50%, #e2e8f0 50%, #f1f5f9 100%);
-  overflow: hidden;
-  
-  /* Imagen de mujer con tablet en blanco y negro */
-  background-image: url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80&fit=crop');
-  background-size: cover;
-  background-position: center right;
-  background-repeat: no-repeat;
-  filter: grayscale(100%);
-  
-  /* Overlay para mejorar contraste del badge */
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to right, rgba(0, 109, 255, 0.3) 0%, rgba(0, 109, 255, 0.1) 40%, transparent 60%);
-  }
-}
-
-.loan-offer-image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 1rem;
-}
-
-.loan-offer-badge {
-  background: #006DFF;
-  color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.loan-offer-content {
-  padding: 1.5rem;
-  background: #ffffff;
-}
-
-.loan-offer-title {
+.onboarding-amount-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #0f172a;
@@ -181,7 +138,7 @@
 
 /* Process Section */
 .process-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .process-title {
@@ -191,29 +148,31 @@
   margin: 0 0 1.5rem 0;
 }
 
-.process-steps {
+.process-steps-numeric {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1.5rem;
 }
 
-.process-step {
+.process-step-numeric {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   text-align: center;
 }
 
-.process-step-icon {
+.process-step-number {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
   background: #f1f5f9;
-  border-radius: 0.75rem;
-  color: #006DFF;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .process-step-text {
@@ -224,27 +183,52 @@
 
 /* Más información en contenido */
 .onboarding-more-info {
-  padding: 1rem 0 2rem 0;
+  padding: 0.5rem 0 1.5rem 0;
   text-align: center;
 }
 
-.onboarding-more-info .onboarding-link {
-  display: inline-block;
+.onboarding-link-button {
+  border: none;
+  background: none;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--bs-color-primary, #006DFF);
+  text-decoration: none;
+  font-family: var(--bs-font-family-base, inherit);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--bs-color-primary-dark, #0058E6);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-color-primary, #006DFF);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
 }
 
-/* Footer sticky sin fondo (transparente) */
+.onboarding-legal {
+  padding-bottom: 1.5rem;
+}
+
+.onboarding-legal-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer sticky dentro del drawer */
 .onboarding-footer {
-  padding: 1.5rem 1.25rem;
-  background: transparent;
+  padding: 1rem 1.5rem 1.5rem;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 100;
 }
 
 .onboarding-cta {
@@ -271,27 +255,6 @@
   &:focus-visible {
     outline: 2px solid var(--bs-color-primary, #006DFF);
     outline-offset: 2px;
-  }
-}
-
-.onboarding-link {
-  text-align: center;
-  color: var(--bs-color-primary, #006DFF);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  text-decoration: none;
-  font-family: var(--bs-font-family-base, inherit);
-  transition: color 0.2s ease;
-  
-  &:hover {
-    color: var(--bs-color-primary-dark, #0058E6);
-    text-decoration: underline;
-  }
-  
-  &:focus-visible {
-    outline: 2px solid var(--bs-color-primary, #006DFF);
-    outline-offset: 2px;
-    border-radius: 0.25rem;
   }
 }
 

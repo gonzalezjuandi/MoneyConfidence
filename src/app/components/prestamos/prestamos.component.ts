@@ -22,7 +22,8 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
   view: 'list' | 'simulation' = 'list';
   
   // Vista para Préstamo Coche
-  prestamoCocheView: 'none' | 'onboarding' | 'simulation' | 'resumen' | 'document-loading' | 'document-manager' | 'firma' | 'seguro-loading' | 'seguro-document-manager' | 'seguro-firma' | 'final-loading' | 'confirmacion' = 'none';
+  prestamoCocheView: 'none' | 'simulation' | 'resumen' | 'document-loading' | 'document-manager' | 'firma' | 'seguro-loading' | 'seguro-document-manager' | 'seguro-firma' | 'final-loading' | 'confirmacion' = 'none';
+  showPrestamoCocheOnboarding = false;
   
   // Datos del préstamo para pasar al resumen
   prestamoCocheData: any = null;
@@ -675,7 +676,8 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
 
   // Métodos para Préstamo Coche
   onIrAPrestamoCoche(): void {
-    this.prestamoCocheView = 'onboarding';
+    this.prestamoCocheView = 'simulation';
+    this.showPrestamoCocheOnboarding = true;
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {
         lucide.createIcons();
@@ -684,7 +686,8 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
   }
 
   onPrestamoCocheStartSimulation(): void {
-    this.prestamoCocheView = 'simulation';
+    // Cerrar el onboarding tipo drawer y dejar solo el simulador
+    this.showPrestamoCocheOnboarding = false;
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {
         lucide.createIcons();
@@ -693,11 +696,9 @@ export class PrestamosComponent implements AfterViewInit, OnInit {
   }
 
   onPrestamoCocheBack(): void {
-    if (this.prestamoCocheView === 'simulation') {
-      this.prestamoCocheView = 'onboarding';
-    } else {
-      this.prestamoCocheView = 'none';
-    }
+    // Desde el simulador o siguientes pantallas, volver al listado principal
+    this.prestamoCocheView = 'none';
+    this.showPrestamoCocheOnboarding = false;
     if (typeof lucide !== 'undefined') {
       setTimeout(() => {
         lucide.createIcons();

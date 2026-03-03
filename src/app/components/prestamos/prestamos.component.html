@@ -1,12 +1,4 @@
 <div class="prestamos-container">
-  <!-- Préstamo Coche: Onboarding -->
-  <app-prestamo-coche-onboarding
-    *ngIf="prestamoCocheView === 'onboarding'"
-    (startSimulation)="onPrestamoCocheStartSimulation()"
-    (close)="onPrestamoCocheClose()"
-    (closeRequested)="onCloseRequestedPrestamoCoche()">
-  </app-prestamo-coche-onboarding>
-
   <!-- Préstamo Coche: Simulación -->
   <app-prestamo-coche-simulacion
     *ngIf="prestamoCocheView === 'simulation'"
@@ -14,6 +6,13 @@
     (next)="onPrestamoCocheNext($event)"
     (closeRequested)="onCloseRequestedPrestamoCoche()">
   </app-prestamo-coche-simulacion>
+
+  <!-- Préstamo Coche: Onboarding como drawer sobre la simulación -->
+  <app-prestamo-coche-onboarding
+    *ngIf="prestamoCocheView === 'simulation' && showPrestamoCocheOnboarding"
+    (startSimulation)="onPrestamoCocheStartSimulation()"
+    (closeRequested)="onPrestamoCocheStartSimulation()">
+  </app-prestamo-coche-onboarding>
 
   <!-- Préstamo Coche: Resumen -->
   <app-prestamo-coche-resumen

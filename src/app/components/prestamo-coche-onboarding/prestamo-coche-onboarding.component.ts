@@ -19,6 +19,7 @@ export class PrestamoCocheOnboardingComponent implements AfterViewInit {
   expandedSeguroId: number | null = null;
   prestamoFaqs = PRESTAMO_FAQS;
   seguroFaqs = SEGURO_FAQS;
+  drawerExpanded = false;
 
   ngAfterViewInit(): void {
     // Asegurar que la pantalla del flujo se muestre siempre desde arriba
@@ -42,6 +43,12 @@ export class PrestamoCocheOnboardingComponent implements AfterViewInit {
 
   onClose(): void {
     this.closeRequested.emit();
+  }
+
+  expandDrawer(): void {
+    if (!this.drawerExpanded) {
+      this.drawerExpanded = true;
+    }
   }
 
   onBack(): void {
