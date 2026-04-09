@@ -9,7 +9,7 @@ export type PostLoginChoice = 'review' | 'skip';
   styles: []
 })
 export class AppComponent {
-  title = 'Tu Potencial Financiero';
+  title = 'MoneyConfidence';
 
   appPhase: 'notification' | 'login' | 'postLogin' | 'main' = 'notification';
 

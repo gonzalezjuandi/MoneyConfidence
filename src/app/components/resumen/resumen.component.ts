@@ -38,7 +38,7 @@ export class ResumenComponent implements OnInit {
 
   onGuardarPotencial(): void {
     console.log('Guardar potencial financiero');
-    alert('Tu potencial financiero ha sido guardado. Recibirás actualizaciones periódicas.');
+    alert('Tu información en MoneyConfidence ha sido guardada. Recibirás actualizaciones periódicas.');
   }
 
   onVolverASimular(): void {

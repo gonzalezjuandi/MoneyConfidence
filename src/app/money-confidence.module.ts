@@ -1,14 +1,14 @@
 /**
  * Módulo independiente para integración en app Angular principal
- * 
+ *
  * Para usar este módulo en otra aplicación Angular:
- * 
+ *
  * 1. Importar este módulo en el módulo principal:
- *    import { TuPotencialFinancieroModule } from './path/to/tu-potencial-financiero.module';
- * 
+ *    import { MoneyConfidenceModule } from './path/to/money-confidence.module';
+ *
  * 2. Agregar a imports:
- *    imports: [TuPotencialFinancieroModule]
- * 
+ *    imports: [MoneyConfidenceModule]
+ *
  * 3. Usar el componente:
  *    <app-wizard></app-wizard>
  */
@@ -16,7 +16,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { WizardComponent } from './components/wizard/wizard.component';
 import { LandingComponent } from './components/landing/landing.component';
@@ -36,14 +35,8 @@ import { ResumenComponent } from './components/resumen/resumen.component';
     EstablecerMetaComponent,
     ResumenComponent
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  exports: [
-    WizardComponent
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  exports: [WizardComponent],
   providers: []
 })
-export class TuPotencialFinancieroModule { }
+export class MoneyConfidenceModule {}
