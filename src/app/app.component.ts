@@ -7,7 +7,7 @@ import { WizardStateService } from './services/wizard-state.service';
   styles: []
 })
 export class AppComponent implements OnInit {
-  title = 'Money Confidence';
+  title = 'Tu Potencial Financiero';
 
   constructor(private wizardState: WizardStateService) {}
 

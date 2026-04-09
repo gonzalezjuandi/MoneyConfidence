@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "money-confidence": {
+    "tu-potencial-financiero": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/money-confidence",
+            "outputPath": "dist/tu-potencial-financiero",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "money-confidence:build:production"
+              "buildTarget": "tu-potencial-financiero:build:production"
             },
             "development": {
-              "buildTarget": "money-confidence:build:development"
+              "buildTarget": "tu-potencial-financiero:build:development"
             }
           },
           "defaultConfiguration": "development"

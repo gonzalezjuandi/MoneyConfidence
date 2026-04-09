@@ -1,7 +1,7 @@
 {
-  "name": "money-confidence",
+  "name": "tu-potencial-financiero",
   "version": "1.0.0",
-  "description": "Money Confidence — MVP Angular (demo bancaria)",
+  "description": "MVP Tu Potencial Financiero - Banco Sabadell",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
